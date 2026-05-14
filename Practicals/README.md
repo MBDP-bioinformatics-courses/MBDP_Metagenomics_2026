@@ -4,14 +4,11 @@ __Table of Contents:__
 
 1. [Introduction](#introduction)
 2. [Setup](#setup)
-    1. [Connnecting to Puhti](#connecting-to-puhti-with-visual-studio-code)
-    2. [Setting up](#setting-up-the-course-folders)
-    3. [Interactive use of Puhti](#interactive-use-of-puhti)
 3. [Data](#data)
 4. [Quality control](#quality-control)
 5. [Metagenome assembly](#metagenome-assembly)
-6. [Read-based taxonomy](#read-based-taxonomy)
-7. [Assembly QC](#assembly-qc)
+6. [Assembly QC](#assembly-qc)
+7. [Read-based taxonomy](#read-based-taxonomy)
 8. [Viromics](#viromics)
 9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
 10. [MAG QC and taxonomy](#mag-qc-and-taxonomy)
@@ -19,6 +16,50 @@ __Table of Contents:__
 12. [Automatic binning](#automatic-binning)
 
 ## Introduction
+
+During the course we will analyse metagenomic data from soils collected in Kilpisjärvi, Finland. The data originates from the publication: [ZZZ](LINK) and are available in SRA under accession number XXX.  
+The samples were sequenced with both short-read (Illumina) and long-read (Nanopore) sequencing technologies, but for training purposes, we will focus on only a subset of of the data, 2 nanopore sequenced samples (ERR5000342 and ERR5000343) and 6 Illumina sequenced samples (ERR5000342, ERR5000343, ERR5000344, ERR5000345, ERR5000346, and ERR5000347). The data are already available on Puhti for the course analyses.
+The matching samples sequenced with both technologies are ...
+
+## Setup
+
+First create your wn working directory under the course project directory on Puhti, e.g.:
+
+```bash
+mkdir /scratch/project_2001499/$USER
+```
+NOTE: change ```$USER``` to your directory name.
+
+After that, clone this github reposoitory to your directory and check that you have access to the files:
+
+```bash
+cd /scratch/project_2001499/$USER   
+git clone https://github.com/MBDP-bioinformatics-courses/MBDP_Metagenomics_2026.git
+```
+
+## Data
+
+When the course github pages are cloned, create folder for the course data and copy the data from the course project directory to your own directory:
+We will make separate folders for short- and long-read data.
+
+```bash
+mkdir /scratch/project_2001499/$USER/01_DATA/short_read
+mkdir /scratch/project_2001499/$USER/01_DATA/long_read
+
+cp -r /scratch/project_2001499/XXX /scratch/project_2001499/$USER/01_DATA/short_read
+cp -r /scratch/project_2001499/XXX /scratch/project_2001499/$USER/01_DATA/long_read
+```
+
+After copying, verify that you have the right data in your directory with ```ls```.  
+
+## Quality control
+
+## Metagenome assembly
+
+## Assembly QC
+
+## Read-based taxonomy
+
 ## Viromics
 
 Make a directory for all virus analyses in your own directory:
@@ -288,4 +329,12 @@ Be careful with AMGs 😊: [some guidelines](https://peerj.com/articles/11447/?u
 
 [International Soil Virus Conference 2026](https://soilmicrobes.fr/international-soil-virus-conference-2026/): virtual participation may be still possible (?), 16-18 Jun 2026, France
 
-[JGI VEGA symposium (Viral EcoGenomics and Applications)](https://jgi.doe.gov/work-with-us/events/vega-symposium), 18-19 Nov 2026, USA
+[JGI VEGA symposium (Viral EcoGenomics and Applications)](https://jgi.doe.gov/work-with-us/events/vega-symposium), 18-19 Nov 2026, USA  
+
+## Genome-resolved metagenomics
+
+## MAG QC and taxonomy
+
+## MAG annotation
+
+## Automatic binning
