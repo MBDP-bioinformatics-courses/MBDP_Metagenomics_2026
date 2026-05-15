@@ -23,14 +23,15 @@ The matching samples sequenced with both technologies are ...
 
 ## Setup
 
-First create your wn working directory under the course project directory on Puhti, e.g.:
+First create your own folder under the course project directory on Puhti, e.g.:
 
 ```bash
 mkdir /scratch/project_2001499/$USER
 ```
+
 NOTE: change ```$USER``` to your directory name.
 
-After that, clone this github reposoitory to your directory and check that you have access to the files:
+After that, clone this github reposoitory to your own folder.  
 
 ```bash
 cd /scratch/project_2001499/$USER   
@@ -43,29 +44,153 @@ When the course github pages are cloned, create folder for the course data and c
 We will make separate folders for short- and long-read data.
 
 ```bash
-mkdir /scratch/project_2001499/$USER/01_DATA/short_read
-mkdir /scratch/project_2001499/$USER/01_DATA/long_read
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/01_DATA/short_read
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/01_DATA/long_read
 
-cp -r /scratch/project_2001499/XXX /scratch/project_2001499/$USER/01_DATA/short_read
-cp -r /scratch/project_2001499/XXX /scratch/project_2001499/$USER/01_DATA/long_read
+cp /scratch/project_2001499/Data/Illumina/* /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/01_DATA/short_read/
+cp /scratch/project_2001499/Data/Nanopore/* /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/01_DATA/long_read/
 ```
 
-After copying, verify that you have the right data in your directory with ```ls```.  
+Copy also the metadata file to your own directory:
 
-## Quality control
+```bash
+cp /scratch/project_2001499/Data/metadata.tsv /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/01_DATA/
+```
+
+After copying, verify that you have the right files in your data folders with ```ls```.  
+
+## Quality control and trimming
+
+### QC
+
+We will start by checking the quality of the raw reads. For short reads, we will use FastQC and MultiQC, and for long reads, we will use NanoPlot and nanoQC.  
+
+Before you start, allocate resources with `sinteractive -i`. You will need 4-6 CPUs and 2-5 GB of memory for the QC. This should not take more than 2 hours.
+
+__Short reads:__  
+Run this once, it will analyse all the fastq files in the folder.
+
+```bash
+module load biokit
+fastqc 01_DATA/short_read/*.fastq.gz -o 01_DATA/FASTQC --threads $SLURM_CPUS_PER_TASK
+multiqc --interactive 01_DATA/FASTQC -o 01_DATA/
+module purge
+```
+
+__Long reads:__  
+Run these to commands with both samples separately, changing the path to the fastq file and output folder name.
+
+```bash
+/projappl/project_2001499/nano_tools/bin/NanoPlot \
+  -o nanoplot_out -f png --fastq path-to/your_raw_nanopore_reads.fastq
+
+/projappl/project_2001499/nano_tools/bin/nanoQC -o nanoQC_out path-to/your_raw_nanopore_reads.fastq
+```
+
+### Trimming
+
+After checking the quality of the reads, we will remove adapter from short reads with cutadapt.  
+The long reads will not be trimmed.  
+
+```bash
+module load cutadapt/4.9
+
+for sample in 01_DATA/short_read/*_R1.fastq.gz; do
+    sample_name=$(basename $sample _R1.fastq.gz)
+    cutadapt \
+        -a FW_ADAPTER -A RV_ADAPTER \
+        -o 02_TRIMMED/${sample_name}_R1_trimmed.fastq.gz \
+        -p 02_TRIMMED/${sample_name}_R2_trimmed.fastq.gz \
+        01_DATA/short_read/${sample_name}_R1.fastq.gz \
+        01_DATA/short_read/${sample_name}_R2.fastq.gz \
+        --cores $SLURM_CPUS_PER_TASK \
+        --minimum-length 50 \
+        > 00_LOGS/${sample_name}_cutadapt.log
+done
+```
 
 ## Metagenome assembly
 
+We will use three different approaches for metagenome assembly: short-read assembly, long-read assembly, and hybrid assembly. For short-read assembly, we will use MEGAHIT, for long-read assembly, we will use Flye, and for hybrid assembly, we will use metaspades.  
+We will assemble only the samples were we have both short- and long-read data. So not all six shorrt reads datasets.  
+The assemblies will take some time, so you can prepare separate batch job scripts for each assembly approach and assemble always both samples in the same script. The commands for each of the assemblies are given below. Check the options you used from the manual of each tool.  
+
+```bash
+/projappl/project_2001499/flye/bin/flye \
+    --meta \
+    --nano-raw 01_DATA/long_read/ERR5000342.nanopore.fastq.gz \
+    --out-dir 03_ASSEMBLY/ERR5000342_flye \
+    --threads $SLURM_CPUS_PER_TASK
+
+/projappl/project_2001499/flye/bin/flye \
+    --meta \
+    --nano-raw 01_DATA/long_read/ERR5000343.nanopore.fastq.gz \
+    --out-dir 03_ASSEMBLY/ERR5000343_flye \
+    --threads $SLURM_CPUS_PER_TASK
+```
+
+```bash
+module load spades/4.2.0
+
+metaspades.py \
+    -1 02_TRIMMED/ERR4998593_R1_trimmed.fastq.gz \
+    -2 02_TRIMMED/ERR4998593_R2_trimmed.fastq.gz \
+    --nanopore 01_DATA/long_read/ERR5000342.nanopore.fastq.gz \
+    --only-assembler -o 03_ASSEMBLY/ERR5000342_hybrid \
+    --threads $SLURM_CPUS_PER_TASK
+
+metaspades.py \
+    -1 02_TRIMMED/ERR4998600_R1_trimmed.fastq.gz \
+    -2 02_TRIMMED/ERR4998600_R2_trimmed.fastq.gz \
+    --nanopore 01_DATA/long_read/ERR5000343.nanopore.fastq.gz \
+    --only-assembler \
+    -o 03_ASSEMBLY/ERR5000343_hybrid \
+    --threads $SLURM_CPUS_PER_TASK
+```
+
+```bash
+module load megahit
+
+megahit \
+    -1 02_TRIMMED/ERR4998593_R1_trimmed.fastq.gz \
+    -2 02_TRIMMED/ERR4998593_R2_trimmed.fastq.gz \
+    -o 03_ASSEMBLY/ERR5000342_megahit \
+    --kmin 27 --k-step 10 --kmin-1pass \
+    -t $SLURM_CPUS_PER_TASK
+
+megahit \
+    -1 02_TRIMMED/ERR4998600_R1_trimmed.fastq.gz \
+    -2 02_TRIMMED/ERR4998600_R2_trimmed.fastq.gz \
+    -o 03_ASSEMBLY/ERR5000343_megahit \
+    --kmin 27 --k-step 10 --kmin-1pass \
+    -t $SLURM_CPUS_PER_TASK
+```
+
 ## Assembly QC
+
+Next we will assess the assemblies with metaquast and choose the best approach for the downstream analyses. Check the options you used from the manual of metaquast.
+
+```bash
+module load quast/5.2.0
+
+metaquast.py \
+    03_ASSEMBLY/*_flye/assembly.fasta \
+    03_ASSEMBLY/*_hybrid/contigs.fasta \
+    03_ASSEMBLY/*_megahit/final.contigs.fa \
+    -o 03_ASSEMBLY/QUAST \
+    --max-ref-number 0
+```
 
 ## Read-based taxonomy
 
 ## Viromics
 
 Make a directory for all virus analyses in your own directory:
-```
+
+```bash
 mkdir /scratch/project_2001499/$USER/04_VIROMICS
 ```
+
 NOTE: change ```$USER``` to your directory name.
 
 ### Identifying viral contigs using geNomad
@@ -77,16 +202,21 @@ Note that geNomad needs its database, which is already downloaded to ```/scratch
 **Running geNomad**
 
 In your 04_VIROMICS directory, create a sample list (*sample_list.txt*), which will have sample names:
-```
+
+```bash
 ERR5000342
 ERR5000343
 ```
+
 Make a directory for geNomad output:
-```
+
+```bash
 mkdir /scratch/project_2001499/$USER/04_VIROMICS/GENOMAD/
 ```
+
 Create a batch job script (*genomad.sh*) in SCRIPTS using this example (check all paths and change if needed!):
-```
+
+```bash
 #!/bin/bash
 #SBATCH --job-name=gm
 #SBATCH --time=06:00:00
@@ -111,8 +241,10 @@ genomad end-to-end \
 --threads $SLURM_CPUS_PER_TASK &> /scratch/project_2001499/$USER/00_LOGS/genomad_${i}.log
 done < $1
 ```
+
 Submit the job:
-```
+
+```bash
 sbatch /path-to/genomad.sh /path-to/sample_list.txt
 ```
 
@@ -122,23 +254,27 @@ Note that we used a while loop in this example, how does it work? What other opt
 
 **geNomad output**
 
-Explore the output you got. Have a look at the log files first: 
-- What steps did geNomad run? 
-- How many viral contigs were identified in each sample? How about plasmids? 
+Explore the output you got. Have a look at the log files first:  
+
+- What steps did geNomad run?  
+- How many viral contigs were identified in each sample? How about plasmids?  
  
-Find summary tables for each sample, where viral contigs are listed: 
-- What viral taxa were predicted? 
+Find summary tables for each sample, where viral contigs are listed:  
+
+- What viral taxa were predicted?  
 - Any RNA viruses? Can they be here?
-- What length do viral contigs have? What length is a bacteriophage genome on average vs other viral groups such as giant viruses? 
-- Are there proviruses predicted? 
+- What length do viral contigs have? What length is a bacteriophage genome on average vs other viral groups such as giant viruses?  
+- Are there proviruses predicted?  
 
 ### Quality control with CheckV
+
 We will assess the quality and completeness of viral contigs identified by geNomad with CheckV. [Read about the tool](https://www.nature.com/articles/s41587-020-00774-7) and [how it works](https://bitbucket.org/berkeleylab/checkv/src/master/).
 
 Note that CheckV needs its database, which is already downloaded to ```/scratch/project_2001499/DBs/``` (and it's also specified in the batch job script below).
 
 Before running CheckV, we can combine geNomad viral contigs (fna files) from two samples into one set. Since some contigs may have same names in both samples, we should add a sample-based prefix first to contig names so that all headings are unique in a combined fna file:
-```
+
+```bash
 cd /scratch/project_2001499/$USER/04_VIROMICS/GENOMAD/
 
 sed "s/^>/>ERR5000342_/" ERR5000342/assembly_summary/assembly_virus.fna > ERR5000342_virus.fna
@@ -147,22 +283,26 @@ sed "s/^>/>ERR5000343_/" ERR5000343/assembly_summary/assembly_virus.fna > ERR500
 
 cat *_virus.fna > virus_combined.fna
 ```
+
 Check that prefixes were added with e.g. ```head```command and you can also check that your combined file contains the right number of sequences with ```seqkit stats```:
 
-```
+```bash
 module load biokit
 
 seqkit stats virus_combined.fna
 ```
+
 **Running CheckV**
 
 Make a directory for CheckV analyses:
 
-```
+```bash
 mkdir /scratch/project_2001499/$USER/04_VIROMICS/CHECKV/
 ```
+
 Run CheckV interactively:
-```
+
+```bash
 cd /scratch/project_2001499/$USER/04_VIROMICS/CHECKV/
 
 sinteractive -A project_2001499 -m 10G -c 8 
@@ -177,6 +317,7 @@ virus_combined_checkv.out \
 -d /scratch/project_2001499/DBs/checkv-db-v1.5/ \
 -t $SLURM_CPUS_PER_TASK
 ```
+
 Check the options you used with ```checkv -h``` and ```checkv end_to_end -h```.
 
 Running CheckV will take a few minutes.
@@ -184,15 +325,17 @@ Running CheckV will take a few minutes.
 **CheckV output**
 
 Explore the output, especially the summary file *quality._summary.tsv*:
+
 - Are there any proviruses predicted? Are those contigs that were flagged as proviruses by geNomad now also flagged as proviruses by CheckV? Any new proviruses compared to geNomad predictions?*
 - Are most contigs of low, medium or high quality? See how the quality corresponds to completeness.
 - Are there any 100% complete viral genomes listed?
 - Are there contigs with kmer_freq > 1? This indicates that the viral genome is represented multiple times in the contig, which is quite rare.
 - Any warnings?
 
-*Note that we used the geNomad output file as the input for CheckV. geNomad output .fna has proviral sequences already cut from host-derived flanking regiongs. These contigs are also renamed with provirus coordinates (e.g. ERR5000343_contig_14802|provirus_18530_57545). CheckV may not recognize them as proviruses, since they don't have host genes anymore. In some cases, however, it does flag them as proviral and thus suggests cutting them more. In addition, it can also mark as proviruses some contigs that were not recognized as proviral by geNomad. CheckV also outputs the proviruses.fna file, which contains proviral sequences cut as CheckV suggests (note contig names changes, e.g. ERR5000342_contig_11875_1 766-4342/4342). This means that in a real project, one would need to run CheckV again on proviruses for getting correct data on proviral_length, gene_count, viral_genes, host_genes, etc. Note that in the second round, CheckV may "want" to cut even more from some proviruses, but usually, it's not run more than twice. 
+*Note that we used the geNomad output file as the input for CheckV. geNomad output .fna has proviral sequences already cut from host-derived flanking regiongs. These contigs are also renamed with provirus coordinates (e.g. ERR5000343_contig_14802|provirus_18530_57545). CheckV may not recognize them as proviruses, since they don't have host genes anymore. In some cases, however, it does flag them as proviral and thus suggests cutting them more. In addition, it can also mark as proviruses some contigs that were not recognized as proviral by geNomad. CheckV also outputs the proviruses.fna file, which contains proviral sequences cut as CheckV suggests (note contig names changes, e.g. ERR5000342_contig_11875_1 766-4342/4342). This means that in a real project, one would need to run CheckV again on proviruses for getting correct data on proviral_length, gene_count, viral_genes, host_genes, etc. Note that in the second round, CheckV may "want" to cut even more from some proviruses, but usually, it's not run more than twice.  
 
- (!) In a real project, CheckV output is typically used for filtering some predictions out. Common thresholds for metagenomic viral contigs include: 
+ (!) In a real project, CheckV output is typically used for filtering some predictions out. Common thresholds for metagenomic viral contigs include:  
+
 - at least 1 virus gene identified by CheckV;
 - host to virus gene count ratio no more than 1:1;
 - length minimum of 5 kbp or 10 kbp, unless a genome is >=50% complete (but not shorter than 1 kbp anyway).
@@ -207,7 +350,7 @@ Since some viral contigs could have been present (and assembled) in both samples
 
 For training purposes, we can use all viral contigs predicted by geNomad (without addittional CheckV-based filtering) for dereplicating as follows:
 
-```
+```bash
 # make directory for vOTUs
 
 mkdir /scratch/project_2001499/$USER/04_VIROMICS/vOTUs
@@ -240,6 +383,7 @@ seqtk subseq ../GENOMAD/virus_combined.fna vOTUs_IDs.txt > vOTUs.fna
 # check how the final vOTUs fasta files looks like
 seqkit stats vOTUs.fna
 ```
+
 How many viral contigs were predicted from two samples in total? How many were retained as vOTUs?
 
 ### Linking vOTUs to putative hosts
@@ -252,10 +396,9 @@ Note that iPHoP needs its database, which is already downloaded to ```/scratch/p
 
 **Running iPHoP**
 
-
 Sample batch job script:
 
-```
+```bash
 #!/bin/bash
 #SBATCH --job-name=iphop
 #SBATCH --time=48:00:00
@@ -276,11 +419,13 @@ iphop predict --fa_file /scratch/project_2001499/$USER/04_VIROMICS/vOTUs/vOTUs.f
 -t $SLURM_CPUS_PER_TASK \
 --single_thread_wish
 ```
+
 Check the used options from manual (how to call it?).
 
 **iPHoP output**
 
 Explore the output. Find the *Host_prediction_to_genus_m75.csv* file. Note that we have applied the 75% cut-off threshold, which is OK for family-level predictions, but the 90% cut-off threshold should be used for genus-level predictions. In a real project, you would need to filter the predictions based on these thresholds.
+
 - How many vOTUs got predictions (% of total)? Are there multiple predictions for some vOTUs?
 - Which methods are listed as used ones?
 - How many valid genus- vs family-level predictions are there? How about higher levels?
@@ -325,7 +470,6 @@ Be careful with AMGs 😊: [some guidelines](https://peerj.com/articles/11447/?u
 [ECR Viromics Webinar Series](https://coms.osu.edu/webinars/ecr-viromics-webinar-series), online, sign up to follow
 
 [RNA Virus Journal Club](https://rdrp.io/journal-club/), online, sign up to follow, you can also nominate a speaker or even act as a chair!
-
 
 [International Soil Virus Conference 2026](https://soilmicrobes.fr/international-soil-virus-conference-2026/): virtual participation may be still possible (?), 16-18 Jun 2026, France
 
