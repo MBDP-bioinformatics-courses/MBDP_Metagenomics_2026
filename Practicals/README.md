@@ -507,8 +507,8 @@ We will use mainly the concepts of **sequence similarity** and **differential co
 
 We can use these two simple concepts to identify the contigs that originate from the same population and group them into a genomic bin.  
 We usually refer to these bins as "population genomes" or "metagenome-assembled genomes" (MAGs).  
-We will bin the MAGs using `anvi'o`, an open-source, community-driven **an**alysis and **vi**sualization platform for microbial **'o**mics (https://anvio.org).  
-Although `anvi'o` does include automatic binning programs such as `MetaBat2` and `DAS Tool`, we will focus here on manual interactive binning.  
+We will bin the MAGs using `anvi'o`, which is an open-source, community-driven **an**alysis and **vi**sualization platform for microbial **'o**mics (https://anvio.org).  
+Although `anvi'o` does include automatic binning programs (e.g. `MetaBat2`), we will focus on manual, interactive binning.  
 
 Let's start by making a directory for the genome-resolved analyses:  
 
@@ -534,7 +534,7 @@ anvi-run-scg-taxonomy -c CONTIGS.db
 ```
 
 **What is each command doing?**  
-You should check their online documentation, for example here:  https://anvio.org/help/8/programs/anvi-gen-contigs-database. 
+You should check their online documentation, for example here:  https://anvio.org/help/8/programs/anvi-gen-contigs-database.  
 And since you're at it, familiarise yourself with two of the main `anvi'o` artifacts:  
 
 - the `CONTIGS.db`: https://anvio.org/help/8/artifacts/contigs-db  
@@ -542,7 +542,7 @@ And since you're at it, familiarise yourself with two of the main `anvi'o` artif
 
 The four commands above will create the `CONTIGS.db` and populate it with information about the sequences, such as the location of open reading frames, SSU rRNA genes and single-copy genes that are used to assess genome quality.  
 
-The `PROFILE.db`, on the other hand, stores information about the contigs across multiple samples, including nucleotide coverage and variability.  
+The `PROFILE.db` stores information about the contigs across multiple samples, including nucleotide coverage and variability.  
 The commands below will loop through the Illumina reads and map them to the assembled contigs:  
 
 ```bash
@@ -572,7 +572,7 @@ done
 anvi-merge PROFILE1.db PROFILE2.db PROFILE3.db
 ```
 
-**What are these commands doing specifically?**
+**What are these commands doing specifically?**  
 **What is the difference between `anvi-profile` and `anvi-merge`?**
 
 Once everything is well understood, you are ready to run these commands using `sbatch`.  
@@ -582,8 +582,8 @@ But remember:
 - You will need to modify the script to point the commands to your own files  
 - You will need to run the script once for each assembly  
 
-After you have submitted the scripts to `sbatch` they will probably queue for a while, and then the job will take a couple of hours to conclude.  
-Once everything is finished we are ready to bin the MAGs!
+After you have submitted the script with `sbatch` the job will take a couple of hours to conclude.  
+But once it is finished we are ready to bin the MAGs!
 
 ## MAG QC and taxonomy
 
