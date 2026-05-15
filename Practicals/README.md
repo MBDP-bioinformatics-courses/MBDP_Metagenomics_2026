@@ -258,7 +258,7 @@ Explore the output you got. Have a look at the log files first:
 
 - What steps did geNomad run?  
 - How many viral contigs were identified in each sample? How about plasmids?  
- 
+
 Find summary tables for each sample, where viral contigs are listed:  
 
 - What viral taxa were predicted?  
@@ -340,6 +340,7 @@ Explore the output, especially the summary file *quality._summary.tsv*:
 - host to virus gene count ratio no more than 1:1;
 - length minimum of 5 kbp or 10 kbp, unless a genome is >=50% complete (but not shorter than 1 kbp anyway).
   
+
 Different thresholds are used for metatranscriptomes.
 
 In this course, we won't filter any viral contigs.
@@ -476,6 +477,113 @@ Be careful with AMGs 😊: [some guidelines](https://peerj.com/articles/11447/?u
 [JGI VEGA symposium (Viral EcoGenomics and Applications)](https://jgi.doe.gov/work-with-us/events/vega-symposium), 18-19 Nov 2026, USA  
 
 ## Genome-resolved metagenomics
+
+Microbial genomes allow us to study in detail things like microbial metabolism, structural variation, horizontal gene transfer, etc.  
+Ideally, we would like to work with complete, circular genomes—**can you think of a reason for this?**  
+**But wait, is this even achievable for metagenomic data?**  
+
+Let's take a look again at the report from `MetaQuast`, which gave us information on the metagenome assemblies:  
+
+- **How long is the longest contig in each assembly?**
+- **What about the N50 values?**
+
+Based on these, do you think that:  
+
+1. **Each contig represents a complete bacterial or achaeal genome**; or 
+2. **The genomes are most likely fragmented into many contigs, each covering only a fraction of the complete genome?**
+
+If you have answered **1**, congratulations, you can skip this part!  
+
+But if you have answered **2**, which is more likely the correct answer, you have then realised that long-read technologies do not guarantee complete, chromosome-level microbial genomes in a single contiguous sequence.  
+It is in fact likely that our metagenome assemblies contain mostly genomes that are fragmented across many contigs.  
+We can't really improve genome contiguity in metagenomes without much, much longer reads.  
+**But could we somehow group the contigs that are coming from the same population to obtain a better representation of their genomes?**  
+
+It turns out we can, and there are different bioinformatic strategies to achieve this.  
+We will use mainly the concepts of **sequence similarity** and **differential coverage**:  
+
+- two contigs that come from the same original population will share similar nucleotide composition  
+- and their coverage signals will be similar across different samples
+
+We can use these two simple concepts to identify the contigs that originate from the same population and group them into a genomic bin.  
+We usually refer to these bins as "population genomes" or "metagenome-assembled genomes" (MAGs).  
+We will mostly use `anvi'o`, which is an open-source, community-driven **an**alysis and **vi**sualization platform for microbial **'o**mics (https://anvio.org).  
+Although `anvi'o` does include automatic binning programs (e.g. `MetaBat2`), we will focus on manual, interactive binning.  
+
+Let's start by making a directory for the genome-resolved analyses:  
+
+```
+mkdir /scratch/project_2001499/$USER/06_ANVIO
+```
+
+In Puhti, you can load the `anvi'o` environment with:  
+
+```bash
+module load anvio
+```
+
+For each assembly, we need to run several commands to prepare the files for `anvi'o`.  
+Let's go through them first **without running anything for now**; we will do this later using `sbatch`.  
+The four commands below will take the fasta file containing the assembled contigs and process the sequences in many ways:  
+
+```bash
+anvi-script-reformat-fasta contigs.fasta
+anvi-gen-contigs-database -f reformatted-contigs.fasta
+anvi-run-hmms -c CONTIGS.db
+anvi-run-scg-taxonomy -c CONTIGS.db
+```
+
+**What is each command doing?**  
+You should check their online documentation, for example here:  https://anvio.org/help/8/programs/anvi-gen-contigs-database.  
+And since you're at it, familiarise yourself with two of the main `anvi'o` artifacts:  
+
+- the `CONTIGS.db`: https://anvio.org/help/8/artifacts/contigs-db  
+- the `PROFILE.db`: https://anvio.org/help/8/artifacts/profile-db  
+
+The four commands above will create the `CONTIGS.db` and populate it with information about the sequences, such as the location of open reading frames, SSU rRNA genes and single-copy genes that are used to assess genome quality.  
+
+The `PROFILE.db` stores information about the contigs across multiple samples, including nucleotide coverage and variability.  
+The commands below will loop through the Illumina reads and map them to the assembled contigs:  
+
+```bash
+# first we index the contigs
+bowtie2-build reformatted-contigs.fasta
+
+# then we map the samples
+for sample in sample1 sample2 sample3
+do
+  bowtie2 -1 R1_reads.fastq -2 R2_reads.fastq
+  samtools view sample.sam
+  samtools sort sample.bam
+  samtools index sample.bam
+done
+```
+
+Finally,  to create the `PROFILE.db`:  
+
+```bash
+# first we loop through the bam files and make them into a PROFILE.db
+for sample in sample1 sample2 sample3
+do
+  anvi-profile sample.bam
+done
+
+# then we merge them into a single PROFILE.db
+anvi-merge PROFILE1.db PROFILE2.db PROFILE3.db
+```
+
+**What are these commands doing specifically?**  
+**What is the difference between `anvi-profile` and `anvi-merge`?**
+
+Once everything is well understood, you are ready to run these commands using `sbatch`.  
+You can find an example script in `/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/src/anvio_sbatch.sh`.  
+But remember:  
+
+- You will need to modify the script to point the commands to your own files  
+- You will need to run the script once for each assembly  
+
+After you have submitted the script with `sbatch` the job will take a couple of hours to conclude.  
+But once it is finished we are ready to bin the MAGs!
 
 ## MAG QC and taxonomy
 
