@@ -31,7 +31,7 @@ __Recommended prerequisites:__
 
 ## Schedule
 
-The course will be from Monday 2nd of September to Friday 6th of September at Siltavuorenpenger 3 A, City Centre Campus.
+The course will be from Monday 25th of May to Friday 5th of June 2026 at Siltavuorenpenger 3 A, City Centre Campus.
 
 __Practicals:__
 
@@ -40,7 +40,7 @@ __Practicals:__
 | Monday 25.5.    | 09.00-16.00   | :school: __Main Building__ | U4072 |
 | Wednesday 27.5.    | 09.00-16.00   | :school: __Main Building__ | U4075 |
 | Friday 29.5.    | 09.00-16.00   | :school: __Main Building__ | U4072 |
-| Monda 01.06.   | 09.00-16.00   | :school: __Main Building__ | U4075 |
+| Monday 01.06.   | 09.00-16.00   | :school: __Main Building__ | U4075 |
 | Wednesday 03.06. | 09.00-16.00   | :school: __Main Building__ | U4075 |
 | Friday 05.06.    | 09.00-16.00   | :school: __Main Building__ | U4075 |
 
@@ -64,10 +64,10 @@ By completing this course, you will:
 
 ## Organizers and teachers
 
-:woman_technologist: __Jenni Hultman__, Natural Resources Institute Finland (LUKE)
-:woman_technologist: __Katariina Pärnänen__, Department of Microbiology, University of Helsinki  
-:woman_technologist: __Tatiana Demina__, Department of Microbiology, University of Helsinki
-:woman_technologist: __Yasmine Eddoubaji__, Department of Microbiology, University of Helsinki
-:woman_technologist: __Matilda Kattilakoski__, Natural Resources Institute Finland (LUKE)  
-:man_technologist: __Igor Pessi__, Finnish Environmental Institute (SYKE)  
-:man_technologist: __Antti Karkman__, Department of Microbiology, University of Helsinki  
+:woman_technologist: __Jenni Hultman__, Natural Resources Institute Finland (LUKE)<br>
+:woman_technologist: __Katariina Pärnänen__, Department of Microbiology, University of Helsinki<br>
+:woman_technologist: __Tatiana Demina__, Department of Microbiology, University of Helsinki<br>
+:woman_technologist: __Yasmine Eddoubaji__, Department of Microbiology, University of Helsinki<br>
+:woman_technologist: __Matilda Kattilakoski__, Natural Resources Institute Finland (LUKE)<br>
+:man_technologist: __Igor Pessi__, Finnish Environmental Institute (SYKE)<br>
+:man_technologist: __Antti Karkman__, Department of Microbiology, University of Helsinki<br>

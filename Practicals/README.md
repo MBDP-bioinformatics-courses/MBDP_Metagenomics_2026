@@ -185,10 +185,10 @@ metaquast.py \
 
 ## Viromics
 
-Make a directory for all virus analyses in your own directory:
+Make a directory for all virus analyses in your own directory (if not created yet):
 
 ```bash
-mkdir /scratch/project_2001499/$USER/04_VIROMICS
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS
 ```
 
 NOTE: change ```$USER``` to your directory name.
@@ -201,7 +201,7 @@ Note that geNomad needs its database, which is already downloaded to ```/scratch
 
 **Running geNomad**
 
-In your 04_VIROMICS directory, create a sample list (*sample_list.txt*), which will have sample names:
+In your 05_VIROMICS directory, create a sample list (*sample_list.txt*), which will have sample names:
 
 ```bash
 ERR5000342
@@ -211,10 +211,10 @@ ERR5000343
 Make a directory for geNomad output:
 
 ```bash
-mkdir /scratch/project_2001499/$USER/04_VIROMICS/GENOMAD/
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/GENOMAD/
 ```
 
-Create a batch job script (*genomad.sh*) in SCRIPTS using this example (check all paths and change if needed!):
+You can find a sample batch job script (*genomad.sh*) in ```/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/src/```, but check all paths and change if needed:
 
 ```bash
 #!/bin/bash
@@ -235,10 +235,10 @@ do
 genomad end-to-end \
 --cleanup \
 --splits 16 \
-/scratch/project_2001499/$USER/02_ASSEMBLY/${i}_flye/assembly.fasta \
-/scratch/project_2001499/$USER/04_VIROMICS/GENOMAD/${i} \
+/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/03_ASSEMBLY/${i}_flye/assembly.fasta \
+/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/GENOMAD/${i} \
 /scratch/project_2001499/DBs/genomad_db \
---threads $SLURM_CPUS_PER_TASK &> /scratch/project_2001499/$USER/00_LOGS/genomad_${i}.log
+--threads $SLURM_CPUS_PER_TASK &> /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/00_LOGS/genomad_${i}.log
 done < $1
 ```
 
@@ -275,7 +275,7 @@ Note that CheckV needs its database, which is already downloaded to ```/scratch/
 Before running CheckV, we can combine geNomad viral contigs (fna files) from two samples into one set. Since some contigs may have same names in both samples, we should add a sample-based prefix first to contig names so that all headings are unique in a combined fna file:
 
 ```bash
-cd /scratch/project_2001499/$USER/04_VIROMICS/GENOMAD/
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/GENOMAD/
 
 sed "s/^>/>ERR5000342_/" ERR5000342/assembly_summary/assembly_virus.fna > ERR5000342_virus.fna
 
@@ -297,13 +297,13 @@ seqkit stats virus_combined.fna
 Make a directory for CheckV analyses:
 
 ```bash
-mkdir /scratch/project_2001499/$USER/04_VIROMICS/CHECKV/
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/CHECKV/
 ```
 
 Run CheckV interactively:
 
 ```bash
-cd /scratch/project_2001499/$USER/04_VIROMICS/CHECKV/
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/CHECKV/
 
 sinteractive -A project_2001499 -m 10G -c 8 
 
@@ -312,7 +312,7 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export PATH="/projappl/project_2001499/checkv/bin:$PATH" 
 
 checkv end_to_end \
-/scratch/project_2001499/$USER/04_VIROMICS/GENOMAD/virus_combined.fna \
+/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/GENOMAD/virus_combined.fna \
 virus_combined_checkv.out \
 -d /scratch/project_2001499/DBs/checkv-db-v1.5/ \
 -t $SLURM_CPUS_PER_TASK
@@ -352,36 +352,43 @@ Since some viral contigs could have been present (and assembled) in both samples
 For training purposes, we can use all viral contigs predicted by geNomad (without addittional CheckV-based filtering) for dereplicating as follows:
 
 ```bash
-# make directory for vOTUs
+# make a directory for vOTUs
 
-mkdir /scratch/project_2001499/$USER/04_VIROMICS/vOTUs
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/vOTUs
 
-cd /scratch/project_2001499/$USER/04_VIROMICS/vOTUs
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/vOTUs
 
 module load biokit 
 
 # blast viral contigs against themselves
 
-pb blastn -dbnuc ../GENOMAD/virus_combined.fna -query ../GENOMAD/virus_combined.fna -outfmt '6 std qlen slen' -max_target_seqs 1000 -out virus_combined.tsv
+pb blastn -dbnuc ../GENOMAD/virus_combined.fna -query ../GENOMAD/virus_combined.fna \
+-outfmt '6 std qlen slen' -max_target_seqs 1000 -out virus_combined.tsv
 
 # pb blast will take about 25 min
 
 module load biopythontools
 
 # calculate ANI values
+
 python /projappl/project_2001499/anicalc.py -i virus_combined.tsv -o virus_combined_ani.tsv
 
 # cluster contigs 
-python /projappl/project_2001499/aniclust.py --fna ../GENOMAD/virus_combined.fna --ani virus_combined_ani.tsv --out virus_combined_clusters.tsv --min_ani 95 --min_tcov 85 --min_qcov 0
+
+python /projappl/project_2001499/aniclust.py --fna ../GENOMAD/virus_combined.fna \
+--ani virus_combined_ani.tsv --out virus_combined_clusters.tsv \
+--min_ani 95 --min_tcov 85 --min_qcov 0
 
 # save the first column of the tsv with clusters into a txt file => vOTUs IDs
 
 cut -f1 virus_combined_clusters.tsv > vOTUs_IDs.txt
 
 # extract vOTU sequences based on their IDs from the original fasta file
+
 seqtk subseq ../GENOMAD/virus_combined.fna vOTUs_IDs.txt > vOTUs.fna
 
 # check how the final vOTUs fasta files looks like
+
 seqkit stats vOTUs.fna
 ```
 
@@ -397,7 +404,13 @@ Note that iPHoP needs its database, which is already downloaded to ```/scratch/p
 
 **Running iPHoP**
 
-Sample batch job script:
+Make a directory for iPHoP output:
+
+```
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/IPHOP
+```
+
+Sample batch job script (found in ```/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/src/```):
 
 ```bash
 #!/bin/bash
@@ -413,13 +426,14 @@ export PATH=/projappl/project_2001499/iphop/bin:$PATH
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-iphop predict --fa_file /scratch/project_2001499/$USER/04_VIROMICS/vOTUs/vOTUs.fna \
+iphop predict --fa_file /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/vOTUs/vOTUs.fna \
 --min_score 75 \
 --db_dir /scratch/project_2001499/DBs/IPHOP_Jun_2025_pub_rw \
---out_dir /scratch/project_2001499/$USER/04_VIROMICS/IPHOP \
+--out_dir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/IPHOP \
 -t $SLURM_CPUS_PER_TASK \
 --single_thread_wish
 ```
+Submit with ```sbatch```.
 
 Check the used options from manual (how to call it?).
 
