@@ -68,7 +68,7 @@ We will start by checking the quality of the raw reads. For short reads, we will
 Before you start, allocate resources with `sinteractive -i`. You will need 4-6 CPUs and 2-5 GB of memory for the QC. This should not take more than 2 hours.
 
 __Short reads:__  
-Run this once, it will analyse all the fastq files in the folder.
+Run this once, it will analyse all the fastq files in the folder with FastQC and then summarize the results with MultiQC.  
 
 ```bash
 module load biokit
@@ -86,6 +86,8 @@ Run these to commands with both samples separately, changing the path to the fas
 
 /projappl/project_2001499/nano_tools/bin/nanoQC -o nanoQC_out path-to/your_raw_nanopore_reads.fastq
 ```
+
+After QC is done, we will explore the results together.  
 
 ### Trimming
 
@@ -112,8 +114,10 @@ done
 ## Metagenome assembly
 
 We will use three different approaches for metagenome assembly: short-read assembly, long-read assembly, and hybrid assembly. For short-read assembly, we will use MEGAHIT, for long-read assembly, we will use Flye, and for hybrid assembly, we will use metaspades.  
-We will assemble only the samples were we have both short- and long-read data. So not all six shorrt reads datasets.  
-The assemblies will take some time, so you can prepare separate batch job scripts for each assembly approach and assemble always both samples in the same script. The commands for each of the assemblies are given below. Check the options you used from the manual of each tool.  
+
+We will assemble only the samples were we have both short- and long-read data. So not all six short reads datasets.  
+The assemblies will take some time, so you can prepare separate batch job scripts for each assembly approach and assemble always both samples in the same script. You can check the [CSC Puhti manual](https://docs.csc.fi/computing/running/creating-job-scripts-puhti/) on how to write a batch job script.  
+The commands for each of the assemblies are given below. Check the options you used from the manual of each tool.  
 
 ```bash
 /projappl/project_2001499/flye/bin/flye \
@@ -168,7 +172,7 @@ megahit \
 
 ## Assembly QC
 
-Next we will assess the assemblies with metaquast and choose the best approach for the downstream analyses. Check the options you used from the manual of metaquast.
+When the assemblies are ready, we will assess the assemblies with metaquast and choose the best approach for the downstream analyses.  
 
 ```bash
 module load quast/5.2.0
