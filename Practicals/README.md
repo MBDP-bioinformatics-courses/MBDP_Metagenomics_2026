@@ -183,6 +183,278 @@ metaquast.py \
 
 ## Read-based taxonomy
 
+Make a directory for read-based taxonomy & enter
+
+```
+mkdir /scratch/project_2001499/$USER/04_TAXONOMY
+
+cd /scratch/project_2001499/$USER/04_TAXONOMY
+```
+Load the Metaphlan module & run Metaphlan using the array script after making any adjustments to the script if needed.
+
+```
+#!/bin/bash
+#SBATCH --job-name=metaphlan
+#SBATCH --account=project_2001499
+#SBATCH --partition=small
+#SBATCH --time=24:00:00
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --array=0-$(($(ls /scratch/project_2001499/Data/Illumina/*.R1.fastq.gz | wc -l)-1))
+#SBATCH --output=logs/metaphlan_%A_%a.out
+#SBATCH --error=logs/metaphlan_%A_%a.err
+
+module load metaphlan
+
+THREADS=8
+DB=/scratch/project_2001499/DBs/metaphlan
+INPUT_DIR=/scratch/project_2001499/Data/Illumina/
+OUT_DIR=./metaphlan_results
+
+mkdir -p ${OUT_DIR}
+mkdir -p logs
+
+# Create array of R1 files
+R1_FILES=(${INPUT_DIR}/*.R1.fastq.gz)
+
+# Select current sample based on SLURM array task ID
+R1=${R1_FILES[$SLURM_ARRAY_TASK_ID]}
+
+# Extract sample name
+SAMPLE=$(basename ${R1} .R1.fastq.gz)
+
+# Define matching R2
+R2=${INPUT_DIR}/${SAMPLE}.R2.fastq.gz
+
+echo "Processing ${SAMPLE} ..."
+echo "R1: ${R1}"
+echo "R2: ${R2}"
+
+metaphlan \
+    ${R1},${R2} \
+    --input_type fastq \
+    --nproc ${THREADS} \
+    --mapout ${OUT_DIR}/${SAMPLE}.mapout.txt \
+    --db_dir ${DB} \
+    -o ${OUT_DIR}/${SAMPLE}_profile.txt
+
+echo "Finished ${SAMPLE}"
+```
+
+Merge files.
+
+```
+ merge_metaphlan_tables.py ./metaphlan_results/*_profile.txt
+```
+Copy metadata to your own folder.
+```
+cp /scratch/project_2001499/Data/metadata.tsv .
+```
+
+Open an interactive session on Puhti with RStudio for 6h using the default settings; alternatively, use the small queue with 4 MB of memory, 4 cores, no NVMe, and 4h time.
+
+Google how to install the mia and miaViz packages Bioc-releases.
+In R:
+Install the mia package, answer "y" when prompted.
+
+Load the mia and ggplot2 packages and set your working directory.
+
+```
+library(mia)
+library(miaViz)
+library(ggplot2)
+setwd("/scratch/project_2001499/myusername/metaphlan")
+```
+
+1) Read from OMA[https://microbiome.github.io/OMA/docs/devel/pages/import.html] and the command's help[https://microbiome.github.io/mia/reference/importMetaPhlAn.html] how to import Metaphlan objects.
+Import data into an object called tse.
+```
+sample_meta |> head()
+tse <- mia::importMetaPhlAn("merged_metaphlan.txt", colData = sample_meta)
+```
+
+2) Inspect the treeSummarizedExperiment (TSE) object
+```
+tse
+assay(tse, "metaphlan")[1:3, 1:3]
+
+
+rowData(tse) |> head()
+# Check coldata, or sample data slot
+colData(tse)
+```
+
+Check taxonomy ranks and how many unique phyla you have.
+```
+getTaxonomyRanks()
+getUnique(tse, rank = "phylum") |> head()
+```
+Let's visually check the abundance of the strains.
+
+```
+plotAbundanceDensity(
+    tse,
+    layout = "jitter",
+    assay.type = "metaphlan",
+    n = 40, point.size = 1, point.shape = 19,
+    point.alpha = 0.1
+) +
+    scale_x_log10(label = scales::percent)
+```
+
+Get top phulym and visualize.
+```
+
+# Getting top taxa on a Phylum level
+tse <- agglomerateByRank(tse, rank = "phylum")
+top_taxa <- getTop(tse, top = 15, assay.type = "metaphlan")
+
+# Inspect the top taxa
+top_taxa
+
+# Renaming the "phylum" rank to keep only top taxa and assign the rest to "Other"
+phylum_renamed <- lapply(rowData(tse)$phylum, function(x) {
+    if (x %in% top_taxa) {
+        x
+    } else {
+        "Other"
+    }
+})
+rowData(tse)$Phylum_sub <- as.character(phylum_renamed)
+
+# Agglomerate the data based on specified taxa
+tse_sub <- agglomerateByVariable(tse, by = "rows", f = "Phylum_sub")
+
+# Visualizing the composition barplot, with samples ordered by the most abundant phylum
+plotAbundance(
+    tse_sub,
+    assay.type = "metaphlan",
+    order.row.by = "abund", order.col.by = "p__Pseudomonadota"
+)
+```
+Alpha diversity
+Read from https://microbiome.github.io/OMA/docs/devel/pages/alpha_diversity.html about the different alpha diversity indices.
+Which one would you choose for this study?
+Calculate all in one go using mia
+
+```
+# The 'index' parameter allows computing multiple diversity indices
+# simultaneously. Without specification, four standard indices are calculated:
+# dbp_dominance, faith_diversity, observed_richness, and shannon_diversity.
+tse <- mia::addAlpha(
+    tse,
+    assay.type = "metaphlan",
+    detection = 10
+)
+
+```
+Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
+
+```
+library(patchwork)
+library(scater)
+
+# Create the plots
+indices <- c(
+    "dbp_dominance", "shannon_diversity"
+)
+plots <- lapply(
+    indices,
+    plotColData,
+    object = tse,
+    x = "vegetation",
+    colour_by = "vegetation"
+)
+
+# Fine-tune visual appearance
+plots <- lapply(
+    plots, "+",
+    theme(
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank()
+    )
+)
+
+# Plot the figures
+wrap_plots(plots, ncol = 1) +
+    plot_layout(guides = "collect")
+
+
+plotColData(tse, x = "shannon_diversity", y = "mositure_percent") +
+    labs(x = "Shannon index", y = "Moisture %") +
+    geom_smooth(method = "lm")
+
+```
+
+Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
+
+
+```
+library(dplyr)
+df <- colData(tse) %>% as.data.frame()
+lm(shannon_diversity ~ df$pH , data =df)   %>% summary()
+```
+
+Beta-diversity
+
+Read about beta-diversity[https://microbiome.github.io/OMA/docs/devel/pages/community_similarity.html]
+
+Which beta-diversity metric would you choose for this study?
+Let's check Bray-Curtis and do unsupervised ordination analysis.
+```
+
+# Run PCoA on the relabundance assay with Bray-Curtis distances
+library(mia)
+tse <- addMDS(
+    tse,
+    FUN = getDissimilarity,
+    method = "bray",
+    assay.type = "metaphlan",
+    name = "MDS_bray"
+)
+```
+Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
+```
+# Create ggplot object
+p <- plotReducedDim(tse, "MDS_bray", colour_by = "vegetation")
+
+# Calculate explained variance
+e <- attr(reducedDim(tse, "MDS_bray"), "eig")
+rel_eig <- e / sum(e[e > 0])
+
+# Add explained variance for each axis
+p <- p + labs(
+    x = paste("PCoA 1 (", round(100 * rel_eig[[1]], 1), "%", ")", sep = ""),
+    y = paste("PCoA 2 (", round(100 * rel_eig[[2]], 1), "%", ")", sep = "")
+)
+
+p
+```
+
+Let's do supervised ordination analysis with Bray-Curtis again using RDA.
+
+```
+tse <- addRDA(
+    tse,
+    assay.type = "metaphlan",
+    formula = assay ~ vegetation + pH + mositure_percent,
+    distance = "bray",
+    na.action = na.exclude
+)
+
+# Store results of PERMANOVA test
+rda_info <- attr(reducedDim(tse, "RDA"), "significance")
+```
+Plot coloring by vegetation and add pH as a covariate.
+```
+# Load packages for plotting function
+library(miaViz)
+
+# Generate RDA plot colored by clinical status
+plotRDA(tse, "RDA", colour.by = "vegetation")
+```
+
 ## Viromics
 
 Make a directory for all virus analyses in your own directory (if not created yet):
