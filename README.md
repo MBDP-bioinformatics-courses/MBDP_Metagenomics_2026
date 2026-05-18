@@ -18,7 +18,6 @@ Many things are possible thanks to the support from [CSC](http://www.csc.fi).
 ## Before the course
 
 Before the course starts, you need to register to CSC and join the course project. You will also need an SSH manager for connecting to Puhti.  
-For more detailed information, follow the instruction in [here](Practicals/before_the_course.md).  
 
 __Compulsory prerequisites:__
 
@@ -31,7 +30,7 @@ __Recommended prerequisites:__
 
 ## Schedule
 
-The course will be from Monday 25th of May to Friday 5th of June 2026 at Siltavuorenpenger 3 A, City Centre Campus.
+The course will be from Monday 25th of May to Friday 5th of June 2026 at City Centre Campus.
 
 __Practicals:__
 
