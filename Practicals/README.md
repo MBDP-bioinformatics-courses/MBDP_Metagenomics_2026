@@ -97,8 +97,8 @@ The long reads will not be trimmed.
 ```bash
 module load cutadapt/4.9
 
-for sample in 01_DATA/short_read/*_R1.fastq.gz; do
-    sample_name=$(basename $sample _R1.fastq.gz)
+for sample in 01_DATA/short_read/*.R1.fastq.gz; do
+    sample_name=$(basename $sample .novaseq.R1.fastq.gz)
     cutadapt \
         -a FW_ADAPTER -A RV_ADAPTER \
         -o 02_TRIMMED/${sample_name}_R1_trimmed.fastq.gz \
