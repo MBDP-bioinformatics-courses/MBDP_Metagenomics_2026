@@ -1,6 +1,6 @@
 # Course Schedule
 
-## Monday
+## Monday (25.5.26)
 
 | Time | Description | Link |
 | --- | --- | -- |
@@ -14,7 +14,7 @@
 | 14.15-15.45 | _Hands-on:_ Metagenomic assembly | [Instructions](README.md#metagenome-assembly) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
-## Wednesday
+## Wednesday (27.5.26)
 
 | Time | Description | Link |
 | --- | --- | -- |
@@ -28,7 +28,7 @@
 | 14.45-15.45 | _Hands-on:_ Viromics (geNomad) | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
-## Friday
+## Friday (29.5.26)
 
 | Time | Description | Link |
 | --- | --- | -- |
@@ -42,7 +42,7 @@
 | 15.00-15.45 | _Hands-on:_ Viromics: exploring IMG/VR and other useful resources | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
-## Monday
+## Monday (1.6.26)
 
 | Time | Description | Link |
 | --- | --- | -- |
@@ -55,7 +55,7 @@
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
 
-## Wednesday 
+## Wednesday (3.6.26)
 
 | Time | Description | Link |
 | --- | --- | -- |
@@ -65,9 +65,10 @@
 | 14.00-14.15 | __Coffee break__  | :coffee: |
 | 14.15-15.45 | _Hands-on:_ Metabolic pathways? HUMAnN? | [Instructions](README.md#XX) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
+| 16.30 -> | __Dinner at Pamela__  | :stew: |
 
 
-## Friday
+## Friday (5.6.26)
 
 | Time | Description | Link |
 | --- | --- | -- |
