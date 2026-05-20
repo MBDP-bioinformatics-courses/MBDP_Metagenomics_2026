@@ -208,14 +208,15 @@ metaquast.py \
 
 Make a directory for read-based taxonomy & enter
 
-```
+```bash
 mkdir /scratch/project_2001499/$USER/04_TAXONOMY
 
 cd /scratch/project_2001499/$USER/04_TAXONOMY
 ```
+
 Load the Metaphlan module & run Metaphlan using the array script after making any adjustments to the script if needed.
 
-```
+```bash
 #!/bin/bash
 #SBATCH --job-name=metaphlan
 #SBATCH --account=project_2001499
@@ -266,11 +267,13 @@ echo "Finished ${SAMPLE}"
 
 Merge files.
 
-```
+```bash
  merge_metaphlan_tables.py ./metaphlan_results/*_profile.txt
 ```
+
 Copy metadata to your own folder.
-```
+
+```bash
 cp /scratch/project_2001499/Data/metadata.tsv .
 ```
 
@@ -282,7 +285,7 @@ Install the mia package, answer "y" when prompted.
 
 Load the mia and ggplot2 packages and set your working directory.
 
-```
+```r
 library(mia)
 library(miaViz)
 library(ggplot2)
@@ -291,13 +294,15 @@ setwd("/scratch/project_2001499/myusername/metaphlan")
 
 1) Read from OMA[https://microbiome.github.io/OMA/docs/devel/pages/import.html] and the command's help[https://microbiome.github.io/mia/reference/importMetaPhlAn.html] how to import Metaphlan objects.
 Import data into an object called tse.
-```
+
+```r
 sample_meta |> head()
 tse <- mia::importMetaPhlAn("merged_metaphlan.txt", colData = sample_meta)
 ```
 
 2) Inspect the treeSummarizedExperiment (TSE) object
-```
+
+```r
 tse
 assay(tse, "metaphlan")[1:3, 1:3]
 
@@ -308,13 +313,15 @@ colData(tse)
 ```
 
 Check taxonomy ranks and how many unique phyla you have.
-```
+
+```r
 getTaxonomyRanks()
 getUnique(tse, rank = "phylum") |> head()
 ```
+
 Let's visually check the abundance of the strains.
 
-```
+```r
 plotAbundanceDensity(
     tse,
     layout = "jitter",
@@ -326,8 +333,8 @@ plotAbundanceDensity(
 ```
 
 Get top phulym and visualize.
-```
 
+```r
 # Getting top taxa on a Phylum level
 tse <- agglomerateByRank(tse, rank = "phylum")
 top_taxa <- getTop(tse, top = 15, assay.type = "metaphlan")
@@ -354,13 +361,14 @@ plotAbundance(
     assay.type = "metaphlan",
     order.row.by = "abund", order.col.by = "p__Pseudomonadota"
 )
-```
+
+```r
 Alpha diversity
 Read from https://microbiome.github.io/OMA/docs/devel/pages/alpha_diversity.html about the different alpha diversity indices.
 Which one would you choose for this study?
 Calculate all in one go using mia
 
-```
+```r
 # The 'index' parameter allows computing multiple diversity indices
 # simultaneously. Without specification, four standard indices are calculated:
 # dbp_dominance, faith_diversity, observed_richness, and shannon_diversity.
@@ -371,9 +379,10 @@ tse <- mia::addAlpha(
 )
 
 ```
+
 Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
 
-```
+```r
 library(patchwork)
 library(scater)
 
@@ -413,7 +422,7 @@ plotColData(tse, x = "shannon_diversity", y = "mositure_percent") +
 Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
 
 
-```
+```r
 library(dplyr)
 df <- colData(tse) %>% as.data.frame()
 lm(shannon_diversity ~ df$pH , data =df)   %>% summary()
@@ -425,7 +434,8 @@ Read about beta-diversity[https://microbiome.github.io/OMA/docs/devel/pages/comm
 
 Which beta-diversity metric would you choose for this study?
 Let's check Bray-Curtis and do unsupervised ordination analysis.
-```
+
+```r
 
 # Run PCoA on the relabundance assay with Bray-Curtis distances
 library(mia)
@@ -437,8 +447,10 @@ tse <- addMDS(
     name = "MDS_bray"
 )
 ```
+
 Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
-```
+
+```r
 # Create ggplot object
 p <- plotReducedDim(tse, "MDS_bray", colour_by = "vegetation")
 
@@ -457,7 +469,7 @@ p
 
 Let's do supervised ordination analysis with Bray-Curtis again using RDA.
 
-```
+```r
 tse <- addRDA(
     tse,
     assay.type = "metaphlan",
@@ -468,9 +480,11 @@ tse <- addRDA(
 
 # Store results of PERMANOVA test
 rda_info <- attr(reducedDim(tse, "RDA"), "significance")
+
 ```
 Plot coloring by vegetation and add pH as a covariate.
-```
+
+```r
 # Load packages for plotting function
 library(miaViz)
 
