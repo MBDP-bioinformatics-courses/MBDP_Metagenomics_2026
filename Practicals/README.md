@@ -268,7 +268,7 @@ echo "Finished ${SAMPLE}"
 Merge files.
 
 ```bash
- merge_metaphlan_tables.py ./metaphlan_results/*_profile.txt
+ merge_metaphlan_tables.py ./metaphlan_results/*_profile.txt > merged_metaphlan.txt
 ```
 
 Copy metadata to your own folder.
@@ -289,14 +289,13 @@ Load the mia and ggplot2 packages and set your working directory.
 library(mia)
 library(miaViz)
 library(ggplot2)
-setwd("/scratch/project_2001499/myusername/metaphlan")
+setwd("/scratch/project_2001499/$USER/04_TAXONOMY")
 ```
 
 1) Read from OMA[https://microbiome.github.io/OMA/docs/devel/pages/import.html] and the command's help[https://microbiome.github.io/mia/reference/importMetaPhlAn.html] how to import Metaphlan objects.
 Import data into an object called tse.
 
 ```r
-sample_meta |> head()
 tse <- mia::importMetaPhlAn("merged_metaphlan.txt", colData = sample_meta)
 ```
 
