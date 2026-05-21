@@ -18,7 +18,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-10.00 | __Katariina Pärnänen:__ Read-based taxonomy| [Slides](../Lectures/XX.pdf) |
+| 09.00-10.00 | __Katariina Pärnänen:__ Read-based taxonomy & statistics| [Slides](../Lectures/XX.pdf) |
 | 10.00-11.00 | _Hands-on:_  Metagenome assembly QC | [Instructions](README.md#metagenome-assembly) |
 | 11.00-12.00 | _Hands-on:_ Read-based taxonomy (MetaPhlAn) | [Instructions](README.md#read-based-taxonomy) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
@@ -32,8 +32,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-10.00 | _Hands-on:_ Viromics (CheckV, vOTUs) | [Instructions](README.md#viromics) |
-| 10.00-11.00 | __Katariina Pärnänen:__ Introduction to statistics | [Slides](../Lectures/XX.pdf) |
+| 09.00-11.00 | _Hands-on:_ Viromics (CheckV, vOTUs) | [Instructions](README.md#viromics) |
 | 11.00-12.00 | _Hands-on:_ Taxonomy in R (installation and reading in data) | [Instructions](README.md#read-based-taxonomy) |
 | 12.00-13.00 | __Lunch break__  | :plate_with_cutlery: |
 | 13.00-14.00 | _Hands-on:_ Taxonomy in R (basic visualizations and statistics) | [Instructions](README.md#read-based-taxonomy) |
@@ -63,7 +62,7 @@
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-15.45 | _Hands-on:_ Metabolic pathways? HUMAnN? | [Instructions](README.md#XX) |
+| 14.15-15.45 | _Hands-on:_ XXX | [Instructions](README.md#XX) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 | 16.30 -> | __Dinner at Pamela__  | :stew: |
 
@@ -73,7 +72,7 @@
 | Time | Description | Link |
 | --- | --- | -- |
 | 09.00-10.30 |  _Hands-on:_ Automatic binning | [Instructions](README.md#automatic-binning) |
-| 10.30-12.00 |  _Hands-on:_ Statistics? | [Instructions](README.md#XX) |
+| 10.30-12.00 |  _Hands-on:_ XX ? | [Instructions](README.md#XX) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 |  _Hands-on:_ XX ? | [Instructions](README.md#XX) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
