@@ -480,7 +480,7 @@ tse <- addRDA(
 # Store results of PERMANOVA test
 rda_info <- attr(reducedDim(tse, "RDA"), "significance")
 
-```
+```r
 Plot coloring by vegetation and add pH as a covariate.
 
 ```r
@@ -649,7 +649,6 @@ Explore the output, especially the summary file *quality._summary.tsv*:
 - host to virus gene count ratio no more than 1:1;
 - length minimum of 5 kbp or 10 kbp, unless a genome is >=50% complete (but not shorter than 1 kbp anyway).
   
-
 Different thresholds are used for metatranscriptomes.
 
 In this course, we won't filter any viral contigs.
@@ -742,6 +741,7 @@ iphop predict --fa_file /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05
 -t $SLURM_CPUS_PER_TASK \
 --single_thread_wish
 ```
+
 Submit with ```sbatch```.
 
 Check the used options from manual (how to call it?).
@@ -812,7 +812,7 @@ Let's take a look again at the report from `MetaQuast`, which gave us informatio
 
 Based on these, do you think that:  
 
-1. **Each contig represents a complete bacterial or achaeal genome**; or 
+1. **Each contig represents a complete bacterial or achaeal genome**; or
 2. **The genomes are most likely fragmented into many contigs, each covering only a fraction of the complete genome?**
 
 If you have answered **1**, congratulations, you can skip this part!  
