@@ -4,8 +4,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-09.30 | __Everyone:__ Introductions and course practicals | [Slides](../Lectures/XX.pdf) |
-| 09.30-10.00 | __Antti Karkman/Jenni Hultman:__ Introduction to metagenomics | [Slides](../Lectures/XX.pdf) |
+| 09.00-10.00 | __Antti Karkman:__ Introduction to metagenomics | [Slides](../Lectures/01_introduction.pdf) |
 | 10.00-11.00 | _Hands-on:_ Setup and data retrieval | [Instructions](README.md#setup) |
 | 11.00-12.00 | _Hands-on:_ Sequence data QC and trimming | [Instructions](README.md#quality-control-and-trimming) |
 | 12.00-13.00 | __Lunch break__  | :plate_with_cutlery: |
