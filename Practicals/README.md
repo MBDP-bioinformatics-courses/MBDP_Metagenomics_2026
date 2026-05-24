@@ -123,6 +123,9 @@ for sample in 01_DATA/Illumina/*.R1.fastq.gz; do
 done
 ```
 
+After the trimiming is done, it would be good practice to check the quality of the trimmed reads again with FastQC and MultiQC.  
+In case there is time, you can run both steps to the files in the `02_TRIMMED` folder and check the results.  
+
 ## Metagenome assembly
 
 We will use three different approaches for metagenome assembly:  
