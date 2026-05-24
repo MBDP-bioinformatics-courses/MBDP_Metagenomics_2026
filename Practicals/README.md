@@ -32,7 +32,7 @@ First create your own folder under the course project directory in Puhti:
 mkdir /scratch/project_2001499/$USER
 ```
 
-And then clone this reposoitory to your own folder:    
+And then clone this repository to your own folder:
 
 ```bash
 cd /scratch/project_2001499/$USER
@@ -63,32 +63,38 @@ After copying, verify that you have the right files in your data folders with ``
 ### QC
 
 We will start by checking the quality of the raw reads.  
-For short reads, we will use FastQC and MultiQC, and for long reads, we will use NanoPlot and nanoQC.  
+For short reads, we will use FastQC and MultiQC, and for long reads NanoPlot.  
 
 Before you start, allocate the computing resources with `sinteractive -i`.  
-You will need 4-6 CPUs and 2-5 GB of memory, and it should not take more than 2 hours.  
+You will need 4 CPUs and 5 GB of memory, and it should not take more than 2 hours.  
 
 __Short reads:__  
 Run this once, it will analyse all the fastq files in the folder with FastQC and then summarize the results with MultiQC.  
 
 ```bash
-module load biokit
 mkdir 01_DATA/FASTQC
 
+module load biokit
 fastqc 01_DATA/Illumina/*.fastq.gz -o 01_DATA/FASTQC --threads $SLURM_CPUS_PER_TASK
+module purrge
+
+module load multiqc
 multiqc --interactive 01_DATA/FASTQC -o 01_DATA/FASTQC
+module purge
 ```
 
 __Long reads:__  
-Run these two commands separately for each sample.  
+Run this command separately for both samples.  
 Make sure to change the path to the fastq file and the name of the output folder.  
+NanoPlot will give a warning about not fonding Chrome, but it will still run. You can ignore the warning.  
 
 ```bash
 /projappl/project_2001499/nano_tools/bin/NanoPlot \
-  -o path-to-output-folder -f png --fastq path-to-nanopore-reads.fastq
-
-/projappl/project_2001499/nano_tools/bin/nanoQC \
-  -o path-to-output-folder path-to-nanopore-reads.fastq
+    -threads $SLURM_CPUS_PER_TASK \
+    -o path-to-output-folder \
+    --only-report \
+    --format png \
+    --fastq path-to-nanopore-reads.fastq
 ```
 
 After QC is done, we will explore the results together.  
