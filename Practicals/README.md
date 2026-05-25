@@ -81,7 +81,7 @@ mkdir 01_DATA/FASTQC
 
 module load biokit
 fastqc 01_DATA/Illumina/*.fastq.gz -o 01_DATA/FASTQC --threads $SLURM_CPUS_PER_TASK
-module purrge
+module purge
 
 module load multiqc
 multiqc --interactive 01_DATA/FASTQC -o 01_DATA/FASTQC
