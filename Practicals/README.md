@@ -218,9 +218,9 @@ metaquast.py \
 Make a directory for read-based taxonomy & enter
 
 ```bash
-mkdir /scratch/project_2001499/$USER/04_TAXONOMY
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY
 
-cd /scratch/project_2001499/$USER/04_TAXONOMY
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY
 ```
 
 Load the Metaphlan module & run Metaphlan using the array script after making any adjustments to the script if needed.
@@ -298,7 +298,7 @@ Load the mia and ggplot2 packages and set your working directory.
 library(mia)
 library(miaViz)
 library(ggplot2)
-setwd("/scratch/project_2001499/$USER/04_TAXONOMY")
+setwd("/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY")
 ```
 
 1) Read from OMA[https://microbiome.github.io/OMA/docs/devel/pages/import.html] and the command's help[https://microbiome.github.io/mia/reference/importMetaPhlAn.html] how to import Metaphlan objects.
