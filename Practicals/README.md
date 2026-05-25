@@ -21,8 +21,15 @@ During the course we will analyse metagenomic data from tundra soils collected i
 The whole dataset can be found in [ENA](https://www.ebi.ac.uk/ena/browser/view/PRJEB41762), and you can read the publication [here](https://doi.org/10.1186/s40793-022-00424-2).  
 The samples were sequenced with both short-read (Illumina) and long-read (Nanopore) sequencing technologies, and for training purposes, we will focus on a small subset of of the data:  
 
-- 2 nanopore libraries (ERR5000342 and ERR5000343)
+- 2 Nanopore libraries (ERR5000342 and ERR5000343)
 - 12 Illumina libraries (ERR4998593, ERR4998611, ERR4998615, ERR4998632, ERR4998657, ERR4998663, ERR4998600, ERR4998601, ERR4998602, ERR4998637, ERR4998638 and ERR4998640)
+
+The Nanopore samples were also sequenced with Illumina, these are the matching accessions:  
+
+| Sample | Vegetation | Nanopore   | Illumina   |
+| -------|------------|------------|------------|
+| m11216 | heathland  | ERR5000342 | ERR4998593 |
+| m12208 | fen        | ERR5000343 | ERR4998600 |
 
 ## Setup
 
