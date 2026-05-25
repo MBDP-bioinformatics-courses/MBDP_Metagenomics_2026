@@ -286,13 +286,9 @@ Copy metadata to your own folder.
 cp /scratch/project_2001499/Data/metadata.tsv .
 ```
 
-Open an interactive session on Puhti with RStudio for 6h using the default settings; alternatively, use the small queue with 4 MB of memory, 4 cores, no NVMe, and 4h time.
+Open an interactive session on Puhti with RStudio for 4h using the default settings; alternatively, use the small queue with 4 MB of memory, 4 cores, no NVMe, and 4h time.
 
-Google how to install the mia and miaViz packages Bioc-releases.
-In R:
-Install the mia package, answer "y" when prompted.
-
-Load the mia and ggplot2 packages and set your working directory.
+Load the mia, miaViz and ggplot2 packages and set your working directory.
 
 ```r
 library(mia)
