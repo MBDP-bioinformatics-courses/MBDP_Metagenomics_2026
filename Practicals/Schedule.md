@@ -32,11 +32,11 @@
 | Time | Description | Link |
 | --- | --- | -- |
 | 09.00-11.00 | _Hands-on:_ Viromics (CheckV, vOTUs) | [Instructions](README.md#viromics) |
-| 11.00-12.00 | _Hands-on:_ Taxonomy in R (installation and reading in data) | [Instructions](README.md#read-based-taxonomy) |
+| 11.00-12.00 | _Hands-on:_ Viromics (iPHoP) | [Instructions](README.md#viromics) |
 | 12.00-13.00 | __Lunch break__  | :plate_with_cutlery: |
-| 13.00-14.00 | _Hands-on:_ Taxonomy in R (basic visualizations and statistics) | [Instructions](README.md#read-based-taxonomy) |
+| 13.00-14.00 | _Hands-on:_ Taxonomy in R (installation and reading in data) | [Instructions](README.md#read-based-taxonomy) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-15.00 | _Hands-on:_ Viromics (iPHoP)| [Instructions](README.md#viromics) |
+| 14.15-15.00 | _Hands-on:_ Taxonomy in R (basic visualizations and statistics) | [Instructions](README.md#read-based-taxonomy) |
 | 15.00-15.45 | _Hands-on:_ Viromics: exploring IMG/VR and other useful resources | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
