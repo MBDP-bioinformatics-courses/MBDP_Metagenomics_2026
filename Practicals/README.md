@@ -232,8 +232,8 @@ Load the Metaphlan module & run Metaphlan using the array script after making an
 #SBATCH --partition=small
 #SBATCH --time=24:00:00
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
-#SBATCH --array=0-12
+#SBATCH --mem=64G
+#SBATCH --array=0-11
 #SBATCH --output=logs/metaphlan_%A_%a.out
 #SBATCH --error=logs/metaphlan_%A_%a.err
 
