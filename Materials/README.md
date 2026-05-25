@@ -34,6 +34,8 @@ Main materials:
 
 - Minimum Information about an Uncultivated Virus Genome: [MIUViG](https://www.nature.com/articles/nbt.4306)
 - IMG/VR version 4 database: [IMG/VR v4](https://academic.oup.com/nar/article/51/D1/D733/6833254)
+- Orchestrating Microbiome Analysis with Bioconductor chapters 3-4 and 12-14: [OMA](https://microbiome.github.io/OMA/docs/devel/) if you did not read these yet
+- [Alpha and beta diversity](https://www.nature.com/articles/s41579-018-0029-9) if you did not read this yet
 
 ## Monday (1.6.26)
 
