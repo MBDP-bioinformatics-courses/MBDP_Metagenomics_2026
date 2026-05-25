@@ -218,9 +218,9 @@ metaquast.py \
 Make a directory for read-based taxonomy & enter
 
 ```bash
-mkdir /scratch/project_2001499/$USER/04_TAXONOMY
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY
 
-cd /scratch/project_2001499/$USER/04_TAXONOMY
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY
 ```
 
 Load the Metaphlan module & run Metaphlan using the array script after making any adjustments to the script if needed.
@@ -298,17 +298,17 @@ Load the mia and ggplot2 packages and set your working directory.
 library(mia)
 library(miaViz)
 library(ggplot2)
-setwd("/scratch/project_2001499/$USER/04_TAXONOMY")
+setwd("/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY")
 ```
 
-1) Read from OMA[https://microbiome.github.io/OMA/docs/devel/pages/import.html] and the command's help[https://microbiome.github.io/mia/reference/importMetaPhlAn.html] how to import Metaphlan objects.
+1) Read from [OMA](https://microbiome.github.io/OMA/docs/devel/pages/import.html) and the import command's [help](https://microbiome.github.io/mia/reference/importMetaPhlAn.html) how to import Metaphlan objects.
 Import data into an object called tse.
 
 ```r
 tse <- mia::importMetaPhlAn("merged_metaphlan.txt", colData = sample_meta)
 ```
 
-2)Inspect the treeSummarizedExperiment (TSE) object
+2) Inspect the treeSummarizedExperiment (TSE) object
 
 ```r
 tse
@@ -320,14 +320,14 @@ rowData(tse) |> head()
 colData(tse)
 ```
 
-Check taxonomy ranks and how many unique phyla you have.
+3) Check taxonomy ranks and how many unique phyla you have.
 
 ```r
 getTaxonomyRanks()
 getUnique(tse, rank = "phylum") |> head()
 ```
 
-Let's visually check the abundance of the strains.
+4) Let's visually check the abundance of the strains.
 
 ```r
 plotAbundanceDensity(
@@ -340,7 +340,7 @@ plotAbundanceDensity(
     scale_x_log10(label = scales::percent)
 ```
 
-Get top phulym and visualize.
+5) Get top phylum and visualize.
 
 ```r
 # Getting top taxa on a Phylum level
@@ -369,9 +369,10 @@ plotAbundance(
     assay.type = "metaphlan",
     order.row.by = "abund", order.col.by = "p__Pseudomonadota"
 )
+```
 
-```r
 Alpha diversity
+
 Read from https://microbiome.github.io/OMA/docs/devel/pages/alpha_diversity.html about the different alpha diversity indices.
 Which one would you choose for this study?
 Calculate all in one go using mia
@@ -388,7 +389,7 @@ tse <- mia::addAlpha(
 
 ```
 
-Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
+06) Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
 
 ```r
 library(patchwork)
@@ -427,7 +428,7 @@ plotColData(tse, x = "shannon_diversity", y = "mositure_percent") +
 
 ```
 
-Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
+7) Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
 
 
 ```r
@@ -436,7 +437,7 @@ df <- colData(tse) %>% as.data.frame()
 lm(shannon_diversity ~ df$pH , data =df)   %>% summary()
 ```
 
-Beta-diversity
+8) Beta-diversity
 
 Read about beta-diversity[https://microbiome.github.io/OMA/docs/devel/pages/community_similarity.html]
 
@@ -456,7 +457,7 @@ tse <- addMDS(
 )
 ```
 
-Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
+9) Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
 
 ```r
 # Create ggplot object
@@ -475,7 +476,7 @@ p <- p + labs(
 p
 ```
 
-Let's do supervised ordination analysis with Bray-Curtis again using RDA.
+10) Let's do supervised ordination analysis with Bray-Curtis again using RDA.
 
 ```r
 tse <- addRDA(
@@ -485,12 +486,12 @@ tse <- addRDA(
     distance = "bray",
     na.action = na.exclude
 )
-
 # Store results of PERMANOVA test
-rda_info <- attr(reducedDim(tse, "RDA"), "significance")
 
-```r
-Plot coloring by vegetation and add pH as a covariate.
+rda_info <- attr(reducedDim(tse, "RDA"), "significance")
+```
+
+11) Plot coloring by vegetation and add pH as a covariate.
 
 ```r
 # Load packages for plotting function
