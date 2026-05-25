@@ -8,11 +8,10 @@ Main materials:
 
 - An intoduciton to metagenomics: [Shotgun metagenomics, from sampling to analysis](https://doi.org/10.1038/nbt.3935)
 
-Alternative suggestions:
+Other materials:  
 
-- Something else: [Link to alternative resource](./alternative_resource.pdf)
-- Blog post on something relavent: [Link to blog post](https://www.example.com/blog-post)
-- Video lecture on something relavent: [Link to video lecture](https://www.example.com/video-lecture)
+- Article: [Ten simple rules for investigating (meta)genomic data from environmental ecosystems](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010675)
+- YouTube video: [A brief introduction to microbial life and 'omics strategies](https://www.youtube.com/watch?v=R9KLkCZ95cU)
 
 ## Wednesday (27.5.26)
 
@@ -41,8 +40,12 @@ Main materials:
 
 Main materials:
 
-- XX
-- XX
+- Article: [A genomic view of Earth’s biomes](https://www.nature.com/articles/s41576-025-00888-1)
+
+Other materials:  
+
+- Article: [Accurate and complete genomes from metagenomes](https://genome.cshlp.org/content/30/3/315)
+- YouTube video: [https://www.youtube.com/watch?v=MqD4aN1p1qA](Basics of metagenomic read recruitment)
 
 ## Wednesday (3.6.26)
 
