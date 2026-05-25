@@ -48,12 +48,10 @@ git clone https://github.com/MBDP-bioinformatics-courses/MBDP_Metagenomics_2026.
 
 ## Data
 
-Now create a folder for the course data and copy the data from the course project directory to your own directory.  
-We will make separate folders for the short- and long-read data:  
+Now create a folder for the course data and copy the data from the course project directory to your own directory:  
 
 ```bash
 cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026
-mkdir 01_DATA
 cp -r /scratch/project_2001499/Data/* 01_DATA
 ```
 
