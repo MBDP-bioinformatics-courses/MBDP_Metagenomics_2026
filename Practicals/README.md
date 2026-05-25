@@ -21,8 +21,15 @@ During the course we will analyse metagenomic data from tundra soils collected i
 The whole dataset can be found in [ENA](https://www.ebi.ac.uk/ena/browser/view/PRJEB41762), and you can read the publication [here](https://doi.org/10.1186/s40793-022-00424-2).  
 The samples were sequenced with both short-read (Illumina) and long-read (Nanopore) sequencing technologies, and for training purposes, we will focus on a small subset of of the data:  
 
-- 2 nanopore libraries (ERR5000342 and ERR5000343)
+- 2 Nanopore libraries (ERR5000342 and ERR5000343)
 - 12 Illumina libraries (ERR4998593, ERR4998611, ERR4998615, ERR4998632, ERR4998657, ERR4998663, ERR4998600, ERR4998601, ERR4998602, ERR4998637, ERR4998638 and ERR4998640)
+
+The Nanopore samples were also sequenced with Illumina, these are the matching accessions:  
+
+| Sample | Vegetation | Nanopore   | Illumina   |
+| -------|------------|------------|------------|
+| m11216 | heathland  | ERR5000342 | ERR4998593 |
+| m12208 | fen        | ERR5000343 | ERR4998600 |
 
 ## Setup
 
@@ -41,8 +48,7 @@ git clone https://github.com/MBDP-bioinformatics-courses/MBDP_Metagenomics_2026.
 
 ## Data
 
-When the course github pages are cloned, create folder for the course data and copy the data from the course project directory to your own directory.  
-We will make separate folders for the short- and long-read data:  
+Now create a folder for the course data and copy the data from the course project directory to your own directory:  
 
 ```bash
 cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026
@@ -70,7 +76,7 @@ mkdir 01_DATA/FASTQC
 
 module load biokit
 fastqc 01_DATA/Illumina/*.fastq.gz -o 01_DATA/FASTQC --threads $SLURM_CPUS_PER_TASK
-module purrge
+module purge
 
 module load multiqc
 multiqc --interactive 01_DATA/FASTQC -o 01_DATA/FASTQC
@@ -80,15 +86,15 @@ module purge
 __Long reads:__  
 Run this command separately for both samples.  
 Make sure to change the path to the fastq file and the name of the output folder.  
-NanoPlot will give a warning about not fonding Chrome, but it will still run. You can ignore the warning.  
+NanoPlot will give a warning about not finding Chrome, but it will still run. You can ignore the warning.  
 
 ```bash
 /projappl/project_2001499/nano_tools/bin/NanoPlot \
-    -threads $SLURM_CPUS_PER_TASK \
+    --threads $SLURM_CPUS_PER_TASK \
     -o path-to-output-folder \
     --only-report \
     --format png \
-    --fastq path-to-nanopore-reads.fastq
+    --fastq path-to-nanopore-reads.fastq.gz
 ```
 
 After QC is done, we will explore the results together.  
@@ -212,9 +218,9 @@ metaquast.py \
 Make a directory for read-based taxonomy & enter
 
 ```bash
-mkdir /scratch/project_2001499/$USER/04_TAXONOMY
+mkdir /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY
 
-cd /scratch/project_2001499/$USER/04_TAXONOMY
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY
 ```
 
 Load the Metaphlan module & run Metaphlan using the array script after making any adjustments to the script if needed.
@@ -227,7 +233,7 @@ Load the Metaphlan module & run Metaphlan using the array script after making an
 #SBATCH --time=24:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
-#SBATCH --array=0-$(($(ls /scratch/project_2001499/Data/Illumina/*.R1.fastq.gz | wc -l)-1))
+#SBATCH --array=0-12
 #SBATCH --output=logs/metaphlan_%A_%a.out
 #SBATCH --error=logs/metaphlan_%A_%a.err
 
@@ -292,17 +298,17 @@ Load the mia and ggplot2 packages and set your working directory.
 library(mia)
 library(miaViz)
 library(ggplot2)
-setwd("/scratch/project_2001499/$USER/04_TAXONOMY")
+setwd("/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY")
 ```
 
-1) Read from OMA[https://microbiome.github.io/OMA/docs/devel/pages/import.html] and the command's help[https://microbiome.github.io/mia/reference/importMetaPhlAn.html] how to import Metaphlan objects.
+1) Read from [OMA](https://microbiome.github.io/OMA/docs/devel/pages/import.html) and the import command's [help](https://microbiome.github.io/mia/reference/importMetaPhlAn.html) how to import Metaphlan objects.
 Import data into an object called tse.
 
 ```r
 tse <- mia::importMetaPhlAn("merged_metaphlan.txt", colData = sample_meta)
 ```
 
-2)Inspect the treeSummarizedExperiment (TSE) object
+2) Inspect the treeSummarizedExperiment (TSE) object
 
 ```r
 tse
@@ -314,14 +320,14 @@ rowData(tse) |> head()
 colData(tse)
 ```
 
-Check taxonomy ranks and how many unique phyla you have.
+3) Check taxonomy ranks and how many unique phyla you have.
 
 ```r
 getTaxonomyRanks()
 getUnique(tse, rank = "phylum") |> head()
 ```
 
-Let's visually check the abundance of the strains.
+4) Let's visually check the abundance of the strains.
 
 ```r
 plotAbundanceDensity(
@@ -334,7 +340,7 @@ plotAbundanceDensity(
     scale_x_log10(label = scales::percent)
 ```
 
-Get top phulym and visualize.
+5) Get top phylum and visualize.
 
 ```r
 # Getting top taxa on a Phylum level
@@ -363,9 +369,10 @@ plotAbundance(
     assay.type = "metaphlan",
     order.row.by = "abund", order.col.by = "p__Pseudomonadota"
 )
+```
 
-```r
 Alpha diversity
+
 Read from https://microbiome.github.io/OMA/docs/devel/pages/alpha_diversity.html about the different alpha diversity indices.
 Which one would you choose for this study?
 Calculate all in one go using mia
@@ -382,7 +389,7 @@ tse <- mia::addAlpha(
 
 ```
 
-Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
+06) Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
 
 ```r
 library(patchwork)
@@ -421,7 +428,7 @@ plotColData(tse, x = "shannon_diversity", y = "mositure_percent") +
 
 ```
 
-Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
+7) Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
 
 
 ```r
@@ -430,7 +437,7 @@ df <- colData(tse) %>% as.data.frame()
 lm(shannon_diversity ~ df$pH , data =df)   %>% summary()
 ```
 
-Beta-diversity
+8) Beta-diversity
 
 Read about beta-diversity[https://microbiome.github.io/OMA/docs/devel/pages/community_similarity.html]
 
@@ -450,7 +457,7 @@ tse <- addMDS(
 )
 ```
 
-Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
+9) Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
 
 ```r
 # Create ggplot object
@@ -469,7 +476,7 @@ p <- p + labs(
 p
 ```
 
-Let's do supervised ordination analysis with Bray-Curtis again using RDA.
+10) Let's do supervised ordination analysis with Bray-Curtis again using RDA.
 
 ```r
 tse <- addRDA(
@@ -479,12 +486,12 @@ tse <- addRDA(
     distance = "bray",
     na.action = na.exclude
 )
-
 # Store results of PERMANOVA test
-rda_info <- attr(reducedDim(tse, "RDA"), "significance")
 
-```r
-Plot coloring by vegetation and add pH as a covariate.
+rda_info <- attr(reducedDim(tse, "RDA"), "significance")
+```
+
+11) Plot coloring by vegetation and add pH as a covariate.
 
 ```r
 # Load packages for plotting function
