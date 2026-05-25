@@ -233,7 +233,7 @@ Load the Metaphlan module & run Metaphlan using the array script after making an
 #SBATCH --time=24:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
-#SBATCH --array=0-$(($(ls /scratch/project_2001499/Data/Illumina/*.R1.fastq.gz | wc -l)-1))
+#SBATCH --array=0-12
 #SBATCH --output=logs/metaphlan_%A_%a.out
 #SBATCH --error=logs/metaphlan_%A_%a.err
 
