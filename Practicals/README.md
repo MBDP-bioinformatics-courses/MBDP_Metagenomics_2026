@@ -90,7 +90,7 @@ NanoPlot will give a warning about not fonding Chrome, but it will still run. Yo
 
 ```bash
 /projappl/project_2001499/nano_tools/bin/NanoPlot \
-    -threads $SLURM_CPUS_PER_TASK \
+    --threads $SLURM_CPUS_PER_TASK \
     -o path-to-output-folder \
     --only-report \
     --format png \
