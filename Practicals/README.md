@@ -55,13 +55,7 @@ cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026
 cp -r /scratch/project_2001499/Data/* 01_DATA
 ```
 
-And copy also the metadata file to your own directory:  
-
-```bash
-cp /scratch/project_2001499/Data/metadata.tsv 01_DATA
-```
-
-After copying, verify that you have the right files in your data folders with ```ls```.  
+This should copy all the data from the course project directory to your own directory. Note that the data is quite big, so it may take some time. After the data has been copied, check that both long and short reads were copied, and also the metadata file.  
 
 ## Quality control and trimming
 
