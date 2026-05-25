@@ -86,7 +86,7 @@ module purge
 __Long reads:__  
 Run this command separately for both samples.  
 Make sure to change the path to the fastq file and the name of the output folder.  
-NanoPlot will give a warning about not fonding Chrome, but it will still run. You can ignore the warning.  
+NanoPlot will give a warning about not finding Chrome, but it will still run. You can ignore the warning.  
 
 ```bash
 /projappl/project_2001499/nano_tools/bin/NanoPlot \
