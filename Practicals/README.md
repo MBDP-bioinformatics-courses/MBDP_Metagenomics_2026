@@ -21,8 +21,15 @@ During the course we will analyse metagenomic data from tundra soils collected i
 The whole dataset can be found in [ENA](https://www.ebi.ac.uk/ena/browser/view/PRJEB41762), and you can read the publication [here](https://doi.org/10.1186/s40793-022-00424-2).  
 The samples were sequenced with both short-read (Illumina) and long-read (Nanopore) sequencing technologies, and for training purposes, we will focus on a small subset of of the data:  
 
-- 2 nanopore libraries (ERR5000342 and ERR5000343)
+- 2 Nanopore libraries (ERR5000342 and ERR5000343)
 - 12 Illumina libraries (ERR4998593, ERR4998611, ERR4998615, ERR4998632, ERR4998657, ERR4998663, ERR4998600, ERR4998601, ERR4998602, ERR4998637, ERR4998638 and ERR4998640)
+
+The Nanopore samples were also sequenced with Illumina, these are the matching accessions:  
+
+| Sample | Vegetation | Nanopore   | Illumina   |
+| -------|------------|------------|------------|
+| m11216 | heathland  | ERR5000342 | ERR4998593 |
+| m12208 | fen        | ERR5000343 | ERR4998600 |
 
 ## Setup
 
@@ -41,12 +48,10 @@ git clone https://github.com/MBDP-bioinformatics-courses/MBDP_Metagenomics_2026.
 
 ## Data
 
-When the course github pages are cloned, create folder for the course data and copy the data from the course project directory to your own directory.  
-We will make separate folders for the short- and long-read data:  
+Now create a folder for the course data and copy the data from the course project directory to your own directory:  
 
 ```bash
 cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026
-mkdir 01_DATA
 cp -r /scratch/project_2001499/Data/* 01_DATA
 ```
 
@@ -76,7 +81,7 @@ mkdir 01_DATA/FASTQC
 
 module load biokit
 fastqc 01_DATA/Illumina/*.fastq.gz -o 01_DATA/FASTQC --threads $SLURM_CPUS_PER_TASK
-module purrge
+module purge
 
 module load multiqc
 multiqc --interactive 01_DATA/FASTQC -o 01_DATA/FASTQC
@@ -86,11 +91,11 @@ module purge
 __Long reads:__  
 Run this command separately for both samples.  
 Make sure to change the path to the fastq file and the name of the output folder.  
-NanoPlot will give a warning about not fonding Chrome, but it will still run. You can ignore the warning.  
+NanoPlot will give a warning about not finding Chrome, but it will still run. You can ignore the warning.  
 
 ```bash
 /projappl/project_2001499/nano_tools/bin/NanoPlot \
-    -threads $SLURM_CPUS_PER_TASK \
+    --threads $SLURM_CPUS_PER_TASK \
     -o path-to-output-folder \
     --only-report \
     --format png \
