@@ -10,10 +10,8 @@ __Table of Contents:__
 6. [Assembly QC](#assembly-qc)
 7. [Read-based taxonomy](#read-based-taxonomy)
 8. [Viromics](#viromics)
-9. [Genome-resolved metagenomics](#genome-resolved-metagenomics)
-10. [MAG QC and taxonomy](#mag-qc-and-taxonomy)
-11. [MAG annotation](#mag-annotation)
-12. [Automatic binning](#automatic-binning)
+9. [MAG binning in anvio](#MAG-binning-in-anvio)
+10. [Phylogenetic and functional analyses of MAGs](#Phylogenetic-and-functional-analyses-of-MAGs)
 
 ## Introduction
 
@@ -806,7 +804,7 @@ Be careful with AMGs 😊: [some guidelines](https://peerj.com/articles/11447/?u
 
 [JGI VEGA symposium (Viral EcoGenomics and Applications)](https://jgi.doe.gov/work-with-us/events/vega-symposium), 18-19 Nov 2026, USA  
 
-## Genome-resolved metagenomics
+## MAG binning in anvio
 
 Microbial genomes allow us to study in detail things like microbial metabolism, structural variation, horizontal gene transfer, etc.  
 Ideally, we would like to work with complete, circular genomes—**can you think of a reason for this?**  
@@ -918,8 +916,5 @@ But remember:
 After you have submitted the script with `sbatch` the job will take a couple of hours to conclude.  
 But once it is finished we are ready to bin the MAGs!
 
-## MAG QC and taxonomy
+## Phylogenetic and functional analyses of MAGs
 
-## MAG annotation
-
-## Automatic binning
