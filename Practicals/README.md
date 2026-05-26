@@ -10,8 +10,8 @@ __Table of Contents:__
 6. [Assembly QC](#assembly-qc)
 7. [Read-based taxonomy](#read-based-taxonomy)
 8. [Viromics](#viromics)
-9. [MAG binning in anvio](#MAG-binning-in-anvio)
-10. [Phylogenetic and functional analyses of MAGs](#Phylogenetic-and-functional-analyses-of-MAGs)
+9. [MAG binning in anvio](#mag-binning-in-anvio)
+10. [Phylogenetic and functional analyses of MAGs](#phylogenetic-and-functional-analyses-of-mags)
 
 ## Introduction
 
@@ -506,6 +506,8 @@ mkdir 05_VIROMICS
 
 NOTE: change ```$USER``` to your directory name.
 
+All the following viromics work will be done within the ```05_VIROMICS``` directory.
+
 ### Identifying viral contigs using geNomad
 
 There are many different tools for predicting viral contigs from metagenomes. In this course, we will use geNomad. [Read about it](https://www.nature.com/articles/s41587-023-01953-y) and check its [GitHub pages](https://github.com/apcamargo/genomad). Good documentation also [here](https://portal.nersc.gov/genomad/pipeline.html). How does it work?
@@ -653,7 +655,6 @@ Explore the output, especially the summary file *quality._summary.tsv*:
 - host to virus gene count ratio no more than 1:1;
 - length minimum of 5 kbp or 10 kbp, unless a genome is >=50% complete (but not shorter than 1 kbp anyway).
   
-
 Different thresholds are used for metatranscriptomes.
 
 In this course, we won't filter any viral contigs.
@@ -760,7 +761,60 @@ Explore the output. Find the *Host_prediction_to_genus_m75.csv* file. Note that 
 - How many valid genus- vs family-level predictions are there? How about higher levels?
 - How do host predictions match read-based taxonomic profiles of the samples? I.e., are most abundant bacterial/archaeal taxa among the predicted hosts?
 
-### Further reading
+### Annotating prokaryotic vOTUs with Phold
+
+We will use [Phold](https://academic.oup.com/nar/article/54/1/gkaf1448/8415830), a protein structure-informed bacteriophage genome annotation tool for annotating the obtained vOTUs. (!) In a real project, you should use Phold only for prokaryotic viruses. Here, we keep all vOTUs at this step for learning purposes.
+
+Note that Phold needs its database, which is already downloaded to ```/scratch/project_2001499/DBs/``` (and it's also specified in the batch job script below).
+
+Make a directory ```PHOLD```for Phold output in your ```05_VIROMICS``` directory.
+
+Make a batch job script (sample found in ```/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/src/```):
+
+```bash
+#!/bin/bash
+#SBATCH --job-name=phold
+#SBATCH --account=project_2001499
+#SBATCH --time=04:00:00
+#SBATCH --partition=gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=10G
+#SBATCH --gres=gpu:v100:1
+
+export PATH="/projappl/project_2001499/phold/bin:$PATH"
+
+cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS
+
+phold run \
+-i /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/05_VIROMICS/vOTUs/vOTUs.fna \
+-o PHOLD \
+-d /scratch/project_2001499/DBs/PHOLD_DB \
+-f &> /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/00_LOGS/phold.log
+```
+Check the used options from the manual.
+
+Submit the batch job script. This run should take about 1 h.
+
+**Phold output**
+
+Explore the output:
+
+- What files were created?
+- Which PHROG categories are reported in *phold_all_cds_functions.tsv* ?
+- What is PHROG?
+- Did eukaryotic vOTUs also get phage-like predictions?
+
+### IMG/VR v4 database
+
+[IMG/VR v4](https://img.jgi.doe.gov/cgi-bin/vr/main.cgi) database: let's explore it online together! Separate instructions. 
+
+Next version of the IMG/VR v4 db = [MetaVR](https://www.meta-virome.org/) database
+
+Many more databases exist!
+
+### Viromics summary
 
 Let's think together what could be done in a real project with the obtained data. What other types of analyses could be run? Viral sequences in Kilpisjärvi soil samples were analysed in [Demina et al 2025](https://link.springer.com/article/10.1186/s40168-025-02053-6).
 
@@ -772,19 +826,11 @@ More about soil viruses:
 
 - [Soil viral diversity, ecology and climate change](https://www.nature.com/articles/s41579-022-00811-z)
 
-If interested in other ecosystems, e.g. human gut, check [A genomic atlas of the human gut virome](https://www.biorxiv.org/content/10.1101/2025.11.01.686033v1), or for marine viruses, check the [Tara Oceans project](https://www.tara-oceans-science.org/viruses/).
+If interested in other ecosystems, e.g. human gut, check [A genomic atlas of the human gut virome](https://www.biorxiv.org/content/10.1101/2025.11.01.686033v1).
 
-### IMG/VR v4 database
+**Other useful resources for future**
 
-[IMG/VR v4](https://img.jgi.doe.gov/cgi-bin/vr/main.cgi) database: let's explore it online together! Separate instructions. 
-
-Next version of the IMG/VR v4 db = [MetaVR](https://www.meta-virome.org/) database
-
-Many more databases exist! Also specific ones, like [PaVE](https://pave.niaid.nih.gov/) for papillomaviruses.
-
-### Other useful resources for future
-
-**Tools**
+***Tools***
 
 Many more tools for virus identification, annotation, and host prediction exist! See [Awesome-Virome](https://github.com/shandley/awesome-virome).
 
@@ -792,7 +838,7 @@ Many more tools for virus identification, annotation, and host prediction exist!
 
 Be careful with AMGs 😊: [some guidelines](https://peerj.com/articles/11447/?utm_source=researchgate.net&utm_medium=article) and a [call for caution](https://www.nature.com/articles/s41564-025-02095-4). Upcoming: [CheckAMG](https://github.com/AnantharamanLab/CheckAMG) (pipeline under development).
 
-**Webinars, meetings, conferences**
+***Webinars, meetings, conferences***
 
 [European Virus Bioinformatics Center](https://evbc.uni-jena.de/) -> you can subscribe for newsletter, check annual ViBioM meetings, and a collection of virus bioinformatics tools
 
