@@ -9,7 +9,8 @@
 #SBATCH --output=%x-%j.out
 
 # initialise
-module load anvio
+export PATH="/projappl/project_2001499/anvio-dev/bin/:/projappl/project_2001499/anvio-gh/:$PATH"
+export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
 
 # you need to add these below:
 # assembly_id: name of your assembly (e.g. ERR5000342)
@@ -22,70 +23,107 @@ contigs_fasta=''
 illumina_data=''
 
 # create output folder
-mkdir $output_dir && cd $_
+mkdir $output_dir
+cd $output_dir
 
 # reformat fasta
-anvi-script-reformat-fasta $contigs_fasta \
-                           -o CONTIGS.fa \
-                           -r CONTIGS-reformat.txt \
-                           -l 5000 \
-                           --prefix $assembly_id \
-                           --simplify-names
+anvi-script-reformat-fasta \
+  $contigs_fasta \
+  -o CONTIGS.fa \
+  -r CONTIGS-reformat.txt \
+  -l 5000 \
+  --prefix $assembly_id \
+  --simplify-names
 
 # create contigs db
-anvi-gen-contigs-database -f CONTIGS.fa \
-                          -o CONTIGS.db \
-                          -n $assembly_id \
-                          -T $SLURM_CPUS_PER_TASK
+anvi-gen-contigs-database \
+  -f CONTIGS.fa \
+  -o CONTIGS.db \
+  -n $assembly_id \
+  -T $SLURM_CPUS_PER_TASK
 
 # rum hmms for SSUs and SCGs
-anvi-run-hmms -c CONTIGS.db \
-              -T $SLURM_CPUS_PER_TASK
+anvi-run-hmms \
+  -c CONTIGS.db \
+  -T $SLURM_CPUS_PER_TASK
 
 # get SCG taxonomy
-anvi-run-scg-taxonomy -c CONTIGS.db \
-                      -T $SLURM_CPUS_PER_TASK
+anvi-run-scg-taxonomy \
+  -c CONTIGS.db \
+  -T $SLURM_CPUS_PER_TASK
 
 # map the illumina reads
+mkdir MAPPING
+cd MAPPING
 
 ## create bowtie index
-bowtie2-build CONTIGS.fa CONTIGS.idx --threads $SLURM_CPUS_PER_TASK &> bowtie2-build.log
+bowtie2-build \
+  ../CONTIGS.fa \
+  CONTIGS.idx \
+  --threads $SLURM_CPUS_PER_TASK
 
 ## map the samples
-for r1 in ${illumina_data}/*_R1_trimmed.fastq.gz
+for r1 in $illumina_data/*_R1_trimmed.fastq.gz
 do
   sample=`basename $r1 _R1_trimmed.fastq.gz`
-  r2=${illumina_data}/${sample}_R2_trimmed.fastq.gz
+  r2=$illumina_data/${sample}_R2_trimmed.fastq.gz
 
-  bowtie2 -1 $r1 \
-          -2 $r2 \
-          -S ${sample}.sam \
-          -x CONTIGS.idx \
-          -p $SLURM_CPUS_PER_TASK \
-          --no-unal
+  bowtie2 \
+    -1 $r1 \
+    -2 $r2 \
+    -S $sample.sam \
+    -x CONTIGS.idx \
+    -p $SLURM_CPUS_PER_TASK \
+    --no-unal
 
-  samtools view -F 4 -bS -@ $SLURM_CPUS_PER_TASK ${sample}.sam -o ${sample}-RAW.bam
-  samtools sort -@ $SLURM_CPUS_PER_TASK ${sample}-RAW.bam -o ${sample}.bam 
-  samtools index -@ $SLURM_CPUS_PER_TASK ${sample}.bam
-  rm ${sample}.sam ${sample}-RAW.bam
+  samtools \
+    view \
+    -F 4 \
+    -bS \
+    -@ $SLURM_CPUS_PER_TASK \
+    -o $sample.raw.bam \
+    $sample.sam
+
+  samtools \
+    sort \
+    -@ $SLURM_CPUS_PER_TASK \
+    -o $sample.bam \
+    $sample.raw.bam
+
+  samtools \
+    index \
+    -@ $SLURM_CPUS_PER_TASK \
+    $sample.bam
+
+  rm $sample.sam
+  rm $sample.raw.bam
 done
 
+cd ..
+
 # create profile dbs
-for bamfile in *.bam
+mkdir PROFILES
+cd PROFILES
+
+for bamfile in ../MAPPING/*.bam
 do
   sample=`basename $bamfile .bam`
 
-  anvi-profile -i $bamfile \
-               -c CONTIGS.db \
-               -o ${sample}-PROFILE \
-               -S $sample \
-               -T $SLURM_CPUS_PER_TASK \
-               --skip-hierarchical-clustering
+  anvi-profile \
+    -c ../CONTIGS.db \
+    -i $bamfile \
+    -o $sample \
+    -S $sample \
+    -T $SLURM_CPUS_PER_TASK \
+    --skip-hierarchical-clustering
 done
 
+cd ..
+
 # merge profiles
-anvi-merge *-PROFILE/PROFILE.db \
-           -c CONTIGS.db \
-           -o MERGED \
-           -S $assembly_id \
-           --enforce-hierarchical-clustering
+anvi-merge \
+  PROFILES/*/PROFILE.db \
+  -c CONTIGS.db \
+  -o MERGED_PROFILES \
+  -S $assembly_id \
+  --enforce-hierarchical-clustering

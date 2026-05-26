@@ -655,6 +655,7 @@ Explore the output, especially the summary file *quality._summary.tsv*:
 - host to virus gene count ratio no more than 1:1;
 - length minimum of 5 kbp or 10 kbp, unless a genome is >=50% complete (but not shorter than 1 kbp anyway).
   
+
 Different thresholds are used for metatranscriptomes.
 
 In this course, we won't filter any viral contigs.
@@ -846,10 +847,11 @@ cd /scratch/project_2001499/$USER/MBDP_Metagenomics_2026
 mkdir 06_ANVIO
 ```
 
-In Puhti, you can load the `anvi'o` environment with:  
+In Puhti, we load our `anvi'o` installation with:  
 
 ```bash
-module load anvio
+export PATH="/projappl/project_2001499/anvio-dev/bin/:/projappl/project_2001499/anvio-gh/:$PATH"
+export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
 ```
 
 For each assembly, we need to run several commands to prepare the files for `anvi'o`.  
@@ -864,11 +866,11 @@ anvi-run-scg-taxonomy -c CONTIGS.db
 ```
 
 **What is each command doing?**  
-You should check their online documentation, for example here:  https://anvio.org/help/8/programs/anvi-gen-contigs-database.  
+You should check their online documentation, for example here:  https://anvio.org/help/main/programs/anvi-gen-contigs-database/.  
 And since you're at it, familiarise yourself with two of the main `anvi'o` artifacts:  
 
-- the `CONTIGS.db`: https://anvio.org/help/8/artifacts/contigs-db  
-- the `PROFILE.db`: https://anvio.org/help/8/artifacts/profile-db  
+- the `CONTIGS.db`: https://anvio.org/help/main/artifacts/contigs-db  
+- the `PROFILE.db`: https://anvio.org/help/main/artifacts/profile-db  
 
 The four commands above will create the `CONTIGS.db` and populate it with information about the sequences, such as the location of open reading frames, SSU rRNA genes and single-copy genes that are used to assess genome quality.  
 
@@ -906,7 +908,7 @@ anvi-merge PROFILE1.db PROFILE2.db PROFILE3.db
 **What is the difference between `anvi-profile` and `anvi-merge`?**
 
 Once everything is well understood, you are ready to run these commands using `sbatch`.  
-You can find an example script in `/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/src/anvio_sbatch.sh`.  
+You can find an example script in `/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/src/anvio.sh`.  
 But remember:  
 
 - You will need to modify the script to point the commands to your own files  
