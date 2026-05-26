@@ -17,10 +17,10 @@ export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
 # output_dir: path to the folder where the results will be stored (e.g. /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/06_ANVIO/ERR5000342)
 # contigs_fasta: path to the fasta file with the assembled contigs (e.g. /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/03_ASSEMBLY/ERR5000342_flye/assembly.fasta)
 # illumina_data: path to the folder containing the trimmed Illumina data (e.g. /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/02_TRIMMED)
-assembly_id=''
-output_dir=''
-contigs_fasta=''
-illumina_data=''
+assembly_id=
+output_dir=
+contigs_fasta=
+illumina_data=
 
 # create output folder
 mkdir $output_dir
