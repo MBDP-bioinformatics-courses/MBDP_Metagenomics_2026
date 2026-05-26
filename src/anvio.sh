@@ -50,7 +50,8 @@ anvi-run-hmms \
 # get SCG taxonomy
 anvi-run-scg-taxonomy \
   -c CONTIGS.db \
-  -T $SLURM_CPUS_PER_TASK &> anvi-run-scg-taxonomy.log
+  -T $SLURM_CPUS_PER_TASK \
+  --scgs-taxonomy-data-dir /scratch/project_2001499/DBs/anvio_scg_data &> anvi-run-scg-taxonomy.log
 
 # map the illumina reads
 mkdir MAPPING
