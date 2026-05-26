@@ -915,7 +915,6 @@ But remember:
 - You will need to modify the script to point the commands to your own files  
 - You will need to run the script once for each assembly  
 
-**DO NOT** modify this file directly; copy it to your own directory first.  
 After you have submitted the script with `sbatch` the job will take a couple of hours to conclude.  
 But once it is finished we are ready to bin the MAGs!
 
