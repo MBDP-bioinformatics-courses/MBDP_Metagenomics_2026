@@ -17,7 +17,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-10.00 | __Katariina Pärnänen:__ Read-based taxonomy & statistics| [Slides](../Lectures/XX.pdf) |
+| 09.00-10.00 | __Katariina Pärnänen:__ Read-based taxonomy & statistics| [Slides](../Lectures/) |
 | 10.00-11.00 | _Hands-on:_  Metagenome assembly QC | [Instructions](README.md#metagenome-assembly) |
 | 11.00-12.00 | _Hands-on:_ Read-based taxonomy (MetaPhlAn) | [Instructions](README.md#read-based-taxonomy) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
