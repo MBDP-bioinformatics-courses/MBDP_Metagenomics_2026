@@ -33,24 +33,24 @@ anvi-script-reformat-fasta \
   -r CONTIGS-reformat.txt \
   -l 5000 \
   --prefix $assembly_id \
-  --simplify-names
+  --simplify-names &> anvi-script-reformat-fasta.log
 
 # create contigs db
 anvi-gen-contigs-database \
   -f CONTIGS.fa \
   -o CONTIGS.db \
   -n $assembly_id \
-  -T $SLURM_CPUS_PER_TASK
+  -T $SLURM_CPUS_PER_TASK &> anvi-gen-contigs-database.log
 
 # rum hmms for SSUs and SCGs
 anvi-run-hmms \
   -c CONTIGS.db \
-  -T $SLURM_CPUS_PER_TASK
+  -T $SLURM_CPUS_PER_TASK &> anvi-run-hmms.log
 
 # get SCG taxonomy
 anvi-run-scg-taxonomy \
   -c CONTIGS.db \
-  -T $SLURM_CPUS_PER_TASK
+  -T $SLURM_CPUS_PER_TASK &> anvi-run-scg-taxonomy.log
 
 # map the illumina reads
 mkdir MAPPING
@@ -60,7 +60,7 @@ cd MAPPING
 bowtie2-build \
   ../CONTIGS.fa \
   CONTIGS.idx \
-  --threads $SLURM_CPUS_PER_TASK
+  --threads $SLURM_CPUS_PER_TASK &> bowtie2-build.log
 
 ## map the samples
 for r1 in $illumina_data/*_R1_trimmed.fastq.gz
@@ -74,7 +74,7 @@ do
     -S $sample.sam \
     -x CONTIGS.idx \
     -p $SLURM_CPUS_PER_TASK \
-    --no-unal
+    --no-unal &> $sample.log
 
   samtools \
     view \
@@ -82,18 +82,18 @@ do
     -bS \
     -@ $SLURM_CPUS_PER_TASK \
     -o $sample.raw.bam \
-    $sample.sam
+    $sample.sam &>> $sample.log
 
   samtools \
     sort \
     -@ $SLURM_CPUS_PER_TASK \
     -o $sample.bam \
-    $sample.raw.bam
+    $sample.raw.bam &>> $sample.log
 
   samtools \
     index \
     -@ $SLURM_CPUS_PER_TASK \
-    $sample.bam
+    $sample.bam &>> $sample.log
 
   rm $sample.sam
   rm $sample.raw.bam
@@ -115,7 +115,7 @@ do
     -o $sample \
     -S $sample \
     -T $SLURM_CPUS_PER_TASK \
-    --skip-hierarchical-clustering
+    --skip-hierarchical-clustering &> $sample.log
 done
 
 cd ..
@@ -126,4 +126,4 @@ anvi-merge \
   -c CONTIGS.db \
   -o MERGED_PROFILES \
   -S $assembly_id \
-  --enforce-hierarchical-clustering
+  --enforce-hierarchical-clustering &> anvi-merge.log
