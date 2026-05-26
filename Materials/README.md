@@ -21,7 +21,7 @@ Taxonomic mapping and R:
 Select OMA chapters or papers that you are less familiar with
 - Orchestrating Microbiome Analysis with Bioconductor chapters 3-4 and 12-14: [OMA](https://microbiome.github.io/OMA/docs/devel/)
 - MetaPhlAn4: [Taxonomic mapping used on the course](https://www.nature.com/articles/s41587-023-01688-w)
-- MetaPhlAn vs Kraken vs Centrifuge: [comparison or maker genes versus whole genome mapping](https://www.cell.com/cell/fulltext/S0092-8674(19)30775-5_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867419307755%3Fshowall%3Dtrue)
+- MetaPhlAn vs Kraken vs Centrifuge: [comparison or maker genes versus whole genome mapping]([https://www.cell.com/cell/fulltext/S0092-8674(19)30775-5_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867419307755%3Fshowall%3Dtrue](https://doi.org/10.1016/j.cell.2019.07.010))
 - [Alpha and beta diversity](https://www.nature.com/articles/s41579-018-0029-9)
 
 Viromics:
