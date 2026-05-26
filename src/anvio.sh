@@ -14,9 +14,9 @@ export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
 
 # you need to add these below:
 # assembly_id: name of your assembly (e.g. ERR5000342)
-# output_dir: path to the folder where the results will be stored (e.g. /scratch/project_2001499/$USER/06_ANVIO/ERR5000342)
-# contigs_fasta: path to the fasta file with the assembled contigs (e.g. /scratch/project_2001499/$USER/02_ASSEMBLY/ERR5000342_flye/assembly.fasta)
-# illumina_data: path to the folder containing the trimmed Illumina data (e.g. /scratch/project_2001499/$USER/02_TRIMMED)
+# output_dir: path to the folder where the results will be stored (e.g. /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/06_ANVIO/ERR5000342)
+# contigs_fasta: path to the fasta file with the assembled contigs (e.g. /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/03_ASSEMBLY/ERR5000342_flye/assembly.fasta)
+# illumina_data: path to the folder containing the trimmed Illumina data (e.g. /scratch/project_2001499/$USER/MBDP_Metagenomics_2026/02_TRIMMED)
 assembly_id=''
 output_dir=''
 contigs_fasta=''
