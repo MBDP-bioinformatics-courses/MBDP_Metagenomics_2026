@@ -23,7 +23,7 @@
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 | _Hands-on:_ Read-based taxonomy (MetaPhlAn, merging files)| [Instructions](README.md#read-based-taxonomy) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-14.45 | __Tatiana Demina:__ Introduction to viromics | [Slides](../Lectures/XX.pdf) |
+| 14.15-14.45 | __Tatiana Demina:__ Introduction to viromics | [Slides](../Lectures/05_viromics_intro.pdf) |
 | 14.45-15.45 | _Hands-on:_ Viromics (geNomad) | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
@@ -31,13 +31,13 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-11.00 | _Hands-on:_ Viromics (CheckV, vOTUs) | [Instructions](README.md#viromics) |
-| 11.00-12.00 | _Hands-on:_ Viromics (iPHoP) | [Instructions](README.md#viromics) |
+| 09.00-11.00 | _Hands-on:_ Viromics (geNomad output, CheckV, vOTUs) | [Instructions](README.md#viromics) |
+| 11.00-12.00 | _Hands-on:_ Viromics (start running iPHoP, Phold) | [Instructions](README.md#viromics) |
 | 12.00-13.00 | __Lunch break__  | :plate_with_cutlery: |
 | 13.00-14.00 | _Hands-on:_ Taxonomy in R (installation and reading in data) | [Instructions](README.md#read-based-taxonomy) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
 | 14.15-15.00 | _Hands-on:_ Taxonomy in R (basic visualizations and statistics) | [Instructions](README.md#read-based-taxonomy) |
-| 15.00-15.45 | _Hands-on:_ Viromics: exploring IMG/VR and other useful resources | [Instructions](README.md#viromics) |
+| 15.00-15.45 | _Hands-on:_ Viromics (Phold output, exploring IMG/VR) | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
 ## Monday (1.6.26)
@@ -61,7 +61,7 @@
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-15.45 | _Hands-on:_ viromics | [Instructions](README.md#XX) |
+| 14.15-15.45 | _Hands-on:_ viromics (iPHoP output, summary) | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 | 16.30 -> | __Dinner at Pamela__  | :stew: |
 
