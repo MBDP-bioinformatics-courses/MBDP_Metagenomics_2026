@@ -275,7 +275,8 @@ echo "Finished ${SAMPLE}"
 Merge files.
 
 ```bash
- merge_metaphlan_tables.py ./metaphlan_results/*_profile.txt > merged_metaphlan.txt
+module load metaphlan
+merge_metaphlan_tables.py ./metaphlan_results/*_profile.txt > merged_metaphlan.txt
 ```
 
 Copy metadata to your own folder.
