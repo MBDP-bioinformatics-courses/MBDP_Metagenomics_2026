@@ -204,9 +204,9 @@ When the assemblies are ready, we will assess the assemblies with metaquast and 
 module load quast/5.2.0
 
 metaquast.py \
-    03_ASSEMBLY/*_flye/assembly.fasta \
-    03_ASSEMBLY/*_hybrid/contigs.fasta \
-    03_ASSEMBLY/*_megahit/final.contigs.fa \
+    03_*/*_flye/assembly.fasta \
+    03_*/*_hybrid/contigs.fasta \
+    03_*/*_megahit/final.contigs.fa \
     -o 03_ASSEMBLY/QUAST \
     --max-ref-number 0
 ```
