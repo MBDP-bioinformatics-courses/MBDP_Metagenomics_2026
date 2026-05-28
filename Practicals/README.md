@@ -316,7 +316,7 @@ rowData(tse) |> head()
 colData(tse)
 ```
 
-3) Check taxonomy ranks and how many unique phyla you have.
+3) Check taxonomy ranks and how many unique phyla you have. Pick a few other taxonomy ranks and check those too.
 
 ```r
 getTaxonomyRanks()
