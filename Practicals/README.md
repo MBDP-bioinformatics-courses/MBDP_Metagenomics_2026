@@ -395,6 +395,38 @@ tse <- mia::addAlpha(
 )
 
 ```
+Differential abundance analysis.  
+Read about differential abundance analysis from OMA book https://microbiome.github.io/OMA/docs/devel/pages/differential_abundance.html
+
+Let's check which phyla are significantly differentially abundant by vegetation.
+
+```r
+library(Maaslin2)
+
+obj_daa_basic <- Maaslin2(
+  input_data = assay(altExp(tse, "phylum")), # The count matrix
+  input_metadata = colData(tse) |> as.data.frame(), # The metadata
+  fixed_effects = "vegetation", # The predictor variable
+  
+  output = "output", # The name of the folder for output files.
+  plot_heatmap = FALSE,
+  plot_scatter = FALSE
+)
+
+
+
+# Extract the results from the list object and calculate the 95% CIs
+res_daa_basic <- obj_daa_basic$results |>
+  mutate(
+    ci_lwr = coef - qt(.975, df = N) * stderr,
+    ci_upr = coef + qt(.975, df = N) * stderr
+  ) |>
+  select(feature, name, coef, pval, qval, ci_lwr, ci_upr)
+
+# Print the results for taxa with the smallest p-values
+res_daa_basic |>
+  arrange(pval) 
+```
 
 06) Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
 
