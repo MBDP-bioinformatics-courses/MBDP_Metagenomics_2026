@@ -507,7 +507,7 @@ print(permanova_res)
 tse <- addRDA(
     tse,
     assay.type = "metaphlan",
-    formula = assay ~ vegetation,
+    formula = assay ~ vegetation + pH,
     distance = "bray",
     na.action = na.exclude
 )
