@@ -213,6 +213,8 @@ metaquast.py \
 
 ## Read-based taxonomy
 
+### Read-based taxonomic mapping with Metaphlan
+
 Make a directory for read-based taxonomy & enter
 
 ```bash
