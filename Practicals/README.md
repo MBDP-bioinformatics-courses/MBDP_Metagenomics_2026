@@ -301,14 +301,14 @@ setwd("/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY")
 sample_meta <- read.table("../04_TAXONOMY/metadata.tsv", sep="\t", header = TRUE, row.names = 1, stringsAsFactors = TRUE)
 ```
 
-1) Read from [OMA](https://microbiome.github.io/OMA/docs/devel/pages/import.html) and the import command's [help](https://microbiome.github.io/mia/reference/importMetaPhlAn.html) how to import Metaphlan objects.
+Read from [OMA](https://microbiome.github.io/OMA/docs/devel/pages/import.html) and the import command's [help](https://microbiome.github.io/mia/reference/importMetaPhlAn.html) how to import Metaphlan objects.
 Import data into an object called tse.
 
 ```r
 tse <- mia::importMetaPhlAn("merged_metaphlan.txt", colData = sample_meta)
 ```
 
-2) Inspect the treeSummarizedExperiment (TSE) object
+Inspect the treeSummarizedExperiment (TSE) object
 
 ```r
 tse
@@ -320,14 +320,14 @@ rowData(tse) |> head()
 colData(tse)
 ```
 
-3) Check taxonomy ranks and how many unique phyla you have. Pick a few other taxonomy ranks and check those too.
+Check taxonomy ranks and how many unique phyla you have. Pick a few other taxonomy ranks and check those too.
 
 ```r
 getTaxonomyRanks()
 getUnique(tse, rank = "phylum")
 ```
 
-4) Let's visually check the abundance of the strains.
+Let's visually check the abundance of the strains.
 
 ```r
 plotAbundanceDensity(
@@ -340,7 +340,7 @@ plotAbundanceDensity(
     scale_x_log10(label = scales::percent)
 ```
 
-5) Get top phylum and visualize. Check also other taxonomic levels. The samples are ordered by vegetation type. Can you spot some taxa that differ between the two vegetation types. Save the figure(s) in your Puhti 04_TAXONOMY directory.
+Get top phylum and visualize. Check also other taxonomic levels. The samples are ordered by vegetation type. Can you spot some taxa that differ between the two vegetation types. Save the figure(s) in your Puhti 04_TAXONOMY directory.
 
 ```r
 # Getting top taxa on a Phylum level
@@ -378,7 +378,7 @@ tse
 mapTaxonomy(tse, taxa = "p__Methanobacteriota")
 ```
 
-Alpha diversity
+### Alpha diversity
 
 Read from https://microbiome.github.io/OMA/docs/devel/pages/alpha_diversity.html about the different alpha diversity indices.
 Which one would you choose for this study?
@@ -395,40 +395,8 @@ tse <- mia::addAlpha(
 )
 
 ```
-Differential abundance analysis.  
-Read about differential abundance analysis from OMA book https://microbiome.github.io/OMA/docs/devel/pages/differential_abundance.html
 
-Let's check which phyla are significantly differentially abundant by vegetation.
-
-```r
-library(Maaslin2)
-
-obj_daa_basic <- Maaslin2(
-  input_data = assay(altExp(tse, "phylum")), # The count matrix
-  input_metadata = colData(tse) |> as.data.frame(), # The metadata
-  fixed_effects = "vegetation", # The predictor variable
-  
-  output = "output", # The name of the folder for output files.
-  plot_heatmap = FALSE,
-  plot_scatter = FALSE
-)
-
-
-
-# Extract the results from the list object and calculate the 95% CIs
-res_daa_basic <- obj_daa_basic$results |>
-  mutate(
-    ci_lwr = coef - qt(.975, df = N) * stderr,
-    ci_upr = coef + qt(.975, df = N) * stderr
-  ) |>
-  select(feature, name, coef, pval, qval, ci_lwr, ci_upr)
-
-# Print the results for taxa with the smallest p-values
-res_daa_basic |>
-  arrange(pval) 
-```
-
-06) Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
+Check alpha diversity by the vegetation type. If you have extra time, you can check how the numeric sample data correlates with Shannon, as exemplified here by moisture percentage. Which metric seems to have the highest correlation? You can check other alpha-diversity indices, too.
 
 ```r
 library(patchwork)
@@ -467,7 +435,7 @@ plotColData(tse, x = "shannon_diversity", y = "mositure_percent") +
 
 ```
 
-7) Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
+Check if the results are statistically significant (p<0.1) using linear models. pH here as example.
 
 
 ```r
@@ -476,7 +444,7 @@ df <- colData(tse) %>% as.data.frame()
 lm(shannon_diversity ~ df$pH , data =df)   %>% summary()
 ```
 
-8) Beta-diversity
+### Beta-diversity
 
 Read about beta-diversity[https://microbiome.github.io/OMA/docs/devel/pages/community_similarity.html]
 
@@ -497,7 +465,7 @@ tse <- addMDS(
 
 ```
 
-9) Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
+Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
 
 ```r
 # Create ggplot object
@@ -533,7 +501,7 @@ permanova_res <- adonis2(
 print(permanova_res)
 ```
 
-10) Let's do supervised ordination analysis with Bray-Curtis again using RDA. Check with other variables too, and you can try multiple variables at once.
+Let's do supervised ordination analysis with Bray-Curtis again using RDA. Check with other variables too, and you can try multiple variables at once.
 
 ```r
 tse <- addRDA(
@@ -556,6 +524,40 @@ library(miaViz)
 
 # Generate RDA plot
 plotRDA(tse, "RDA", colour.by = "vegetation")
+```
+
+### Differential abundance analysis
+
+Read about differential abundance analysis from OMA book https://microbiome.github.io/OMA/docs/devel/pages/differential_abundance.html
+
+Let's check which phyla are significantly differentially abundant by vegetation.
+
+```r
+library(Maaslin2)
+
+obj_daa_basic <- Maaslin2(
+  input_data = assay(altExp(tse, "phylum")), # The count matrix
+  input_metadata = colData(tse) |> as.data.frame(), # The metadata
+  fixed_effects = "vegetation", # The predictor variable
+  
+  output = "output", # The name of the folder for output files.
+  plot_heatmap = FALSE,
+  plot_scatter = FALSE
+)
+
+
+
+# Extract the results from the list object and calculate the 95% CIs
+res_daa_basic <- obj_daa_basic$results |>
+  mutate(
+    ci_lwr = coef - qt(.975, df = N) * stderr,
+    ci_upr = coef + qt(.975, df = N) * stderr
+  ) |>
+  select(feature, name, coef, pval, qval, ci_lwr, ci_upr)
+
+# Print the results for taxa with the smallest p-values
+res_daa_basic |>
+  arrange(pval) 
 ```
 
 ## Viromics
