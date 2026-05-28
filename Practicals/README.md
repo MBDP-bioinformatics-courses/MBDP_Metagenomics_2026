@@ -340,8 +340,8 @@ plotAbundanceDensity(
 
 ```r
 # Getting top taxa on a Phylum level
-tse <- agglomerateByRank(tse, rank = "phylum")
-top_taxa <- getTop(tse, top = 15, assay.type = "metaphlan")
+
+top_taxa <- getTop(altExp(tse, "phylum"), top = 15, assay.type = "metaphlan")
 
 # Inspect the top taxa
 top_taxa
