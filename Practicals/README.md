@@ -297,6 +297,8 @@ library(mia)
 library(miaViz)
 library(ggplot2)
 setwd("/scratch/project_2001499/$USER/MBDP_Metagenomics_2026/04_TAXONOMY")
+# Read in sample_metadata
+sample_meta <- read.table("../04_TAXONOMY/metadata.tsv", sep="\t" , header=TRUE)
 ```
 
 1) Read from [OMA](https://microbiome.github.io/OMA/docs/devel/pages/import.html) and the import command's [help](https://microbiome.github.io/mia/reference/importMetaPhlAn.html) how to import Metaphlan objects.
