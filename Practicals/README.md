@@ -481,13 +481,13 @@ p <- p + labs(
 p
 ```
 
-10) Let's do supervised ordination analysis with Bray-Curtis again using RDA.
+10) Let's do supervised ordination analysis with Bray-Curtis again using RDA. Check with other variables too, and you can try multiple variables at once.
 
 ```r
 tse <- addRDA(
     tse,
     assay.type = "metaphlan",
-    formula = assay ~ vegetation + pH + mositure_percent,
+    formula = assay ~ vegetation,
     distance = "bray",
     na.action = na.exclude
 )
