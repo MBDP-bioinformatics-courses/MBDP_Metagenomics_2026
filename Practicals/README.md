@@ -520,7 +520,7 @@ rda_info <- attr(reducedDim(tse, "RDA"), "significance")
 # Load packages for plotting function
 library(miaViz)
 
-# Generate RDA plot colored by clinical status
+# Generate RDA plot
 plotRDA(tse, "RDA", colour.by = "vegetation")
 ```
 
