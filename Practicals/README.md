@@ -320,7 +320,7 @@ colData(tse)
 
 ```r
 getTaxonomyRanks()
-getUnique(tse, rank = "phylum") |> head()
+getUnique(tse, rank = "phylum")
 ```
 
 4) Let's visually check the abundance of the strains.
