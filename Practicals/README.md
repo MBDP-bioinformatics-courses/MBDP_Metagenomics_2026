@@ -460,6 +460,7 @@ tse <- addMDS(
     assay.type = "metaphlan",
     name = "MDS_bray"
 )
+
 ```
 
 9) Plot and color by vegetation. You can also color by the numeric variables. Which variable seems to drive dissimilarity between samples most?
@@ -479,6 +480,23 @@ p <- p + labs(
 )
 
 p
+
+# Statistical testing
+# Calculate Bray-Curtis distance matrix
+bray_dist <- getDissimilarity(
+  tse,
+  method = "bray",
+  assay.type = "metaphlan"
+)
+library(vegan)
+# Run PERMANOVA
+permanova_res <- adonis2(
+  bray_dist ~ vegetation,
+  data = as.data.frame(colData(tse)),
+  permutations = 999
+)
+
+print(permanova_res)
 ```
 
 10) Let's do supervised ordination analysis with Bray-Curtis again using RDA. Check with other variables too, and you can try multiple variables at once.
