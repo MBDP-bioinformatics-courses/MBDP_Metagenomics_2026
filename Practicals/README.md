@@ -288,6 +288,8 @@ cp /scratch/project_2001499/Data/metadata.tsv .
 
 Open an interactive session on Puhti with RStudio for 4h using the default settings; alternatively, use the small queue with 4 MB of memory, 4 cores, no NVMe, and 4h time.
 
+Open a new R script file and name it 04_TAXONOMY.R
+
 Load the mia, miaViz and ggplot2 packages and set your working directory.
 
 ```r
@@ -336,7 +338,7 @@ plotAbundanceDensity(
     scale_x_log10(label = scales::percent)
 ```
 
-5) Get top phylum and visualize.
+5) Get top phylum and visualize. Check also other taxonomic levels. The samples are ordered by vegetation type. Can you spot some taxa that differ between the two vegetation types. Save the figure(s) in your Puhti 04_TAXONOMY directory.
 
 ```r
 # Getting top taxa on a Phylum level
@@ -348,11 +350,11 @@ top_taxa
 
 # Renaming the "phylum" rank to keep only top taxa and assign the rest to "Other"
 phylum_renamed <- lapply(rowData(tse)$phylum, function(x) {
-    if (x %in% top_taxa) {
-        x
-    } else {
-        "Other"
-    }
+  if (x %in% top_taxa) {
+    x
+  } else {
+    "Other"
+  }
 })
 rowData(tse)$Phylum_sub <- as.character(phylum_renamed)
 
@@ -361,10 +363,17 @@ tse_sub <- agglomerateByVariable(tse, by = "rows", f = "Phylum_sub")
 
 # Visualizing the composition barplot, with samples ordered by the most abundant phylum
 plotAbundance(
-    tse_sub,
-    assay.type = "metaphlan",
-    order.row.by = "abund", order.col.by = "p__Pseudomonadota"
+  tse_sub,
+  group.col.by="vegetation",
+  assay.type = "metaphlan",
+  order.row.by = "abund", order.col.by = "p__Pseudomonadota",
+  add.x.text = TRUE,
 )
+tse
+
+# Check the taxonomy of an interesting phylum
+
+mapTaxonomy(tse, taxa = "p__Methanobacteriota")
 ```
 
 Alpha diversity
