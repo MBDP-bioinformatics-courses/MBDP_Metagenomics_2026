@@ -1010,7 +1010,7 @@ So, make sure that you are inside a screen and then:
 
 ```bash
 # connect interactively to a computing node
-sinteractive -t 6:00:00 -m 24G -A project_2001499
+sinteractive -t 8:00:00 -m 24G -A project_2001499
 
 # get the computing node id
 # write down the output of this command, 
@@ -1023,7 +1023,7 @@ export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
 
 # get your port number
 # also write down the output for later
-grep $USER anvio_ports.txt | cut -f 2
+grep $USER /scratch/project_2001499/anvio_ports.txt | cut -f 2
 
 # now we launch anvi-interactive
 # remember to adjust the command first
@@ -1048,13 +1048,28 @@ ssh -L \
   YOUR-USER@LOGIN-NODE.csc.fi
 
 # where:
-# PORT-NUMBER: the output of 'grep $USER anvio_ports.txt | cut -f 2'
+# PORT-NUMBER: the output of 'grep $USER /scratch/project_2001499/anvio_ports.txt | cut -f 2'
 # COMPUTING-NODE-ID: the output of 'echo ${SLURMD_NODENAME}.bullx'
 # YOUR-USER: the output of 'echo $USER'
 # LOGIN-NODE: the output of 'hostname -a'
 ```
 
+Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.  
+
 **Windows with PuTTY**  
+
+- Open PuTTY
+- 'Host name' will now be the output of `echo ${SLURMD_NODENAME}.bullx`
+- In the left menu go to Connection > SSH > Tunnels
+  - 'Source port': the output of `grep $USER /scratch/project_2001499/anvio_ports.txt | cut -f 2`   
+  - 'Destination': the output of `echo ${SLURMD_NODENAME}.bullx`, 
+    followed by a colon (`:`),
+    followed by the source port again,
+    e.g. `r07c05.bullx:8123`
+  - Click 'Add' and then 'Open'
+- Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.  
+
+**Binning the MAGs (finally!)** 
 
 
 
