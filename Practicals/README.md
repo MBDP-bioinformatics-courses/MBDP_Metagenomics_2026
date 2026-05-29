@@ -1101,7 +1101,16 @@ anvi-interactive \
   --server-only
 ```
 
-`anvi-interactive` is now hosting a web server that we can access using the browser (Chrome- or Firefox-based, preferentially).  
+Wait until you see something like this:  
+
+```bash
+Server address ...............................: http://0.0.0.0:8123
+
+* When you are ready, press CTRL+C once to terminate the server and go back to the
+  command line.
+```
+
+This means that `anvi-interactive` is now hosting a web server that we can access using the browser.  
 But to access this web server we need to do a small procedure called SSH tunelling.  
 First, detach the screen with `ctrl + a + d` and logout of Puhti.  
 Then, connect to Puhti again using a modified approach:  
@@ -1136,6 +1145,43 @@ Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.
 - Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.  
 
 **Binning the MAGs (finally!)** 
+
+Now open your browser (Chrome- or Firefox-based, preferentially) and go to the adress that is shown by `anvi-interactive`, e.g. `http://0.0.0.0:8101`.  
+We will first take a look together on how this works in practice, and then you can continue binning your own MAGs.  
+To save your collection, click on 'Store bin collection', write a name for the collection ('default' is fine) and then click 'Store'.  
+Wait until you see a blue banner in the top-right of the screen; then you can close the page, or continue binning.  
+
+If you want to "zoom in" on a given bin, you can use another command:  
+
+```bash
+anvi-refine \
+  -c path-to-the-CONTIGS.db \
+  -p path-to-the-merged-PROFILE.db \
+  -C collection-name \
+  -b bin-name \
+  -P your-port-number \
+  --ip-address 0.0.0.0 \
+  --server-only
+```
+
+If you want to see which bins you have in your collection you can do:  
+
+```bash
+anvi-show-collections-and-bins \
+  -p path-to-the-merged-PROFILE.db
+```
+
+And to get a summary of the completeness, redundancy, taxonomy of the bins:  
+
+```bash
+anvi-summarize \
+  -c path-to-the-CONTIGS.db \
+  -p path-to-the-merged-PROFILE.db \
+  -o path-to-the-output-folder \
+  -C collection-name
+```
+
+
 
 
 

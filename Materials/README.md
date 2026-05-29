@@ -6,7 +6,7 @@ The listed materials are supposed to be read before the course day as an introdu
 
 Main materials:
 
-- An intoduciton to metagenomics: [Shotgun metagenomics, from sampling to analysis](https://doi.org/10.1038/nbt.3935)
+- Article: [An introduciton to metagenomics: shotgun metagenomics, from sampling to analysis](https://doi.org/10.1038/nbt.3935)
 
 Other materials:  
 
@@ -45,7 +45,7 @@ Main materials:
 Other materials:  
 
 - Article: [Accurate and complete genomes from metagenomes](https://genome.cshlp.org/content/30/3/315)
-- YouTube video: [https://www.youtube.com/watch?v=MqD4aN1p1qA](Basics of metagenomic read recruitment)
+- YouTube video: [Basics of metagenomic read recruitment](https://www.youtube.com/watch?v=MqD4aN1p1qA)
 
 ## Wednesday (3.6.26)
 
