@@ -656,6 +656,7 @@ Explore the output, especially the summary file *quality._summary.tsv*:
 - host to virus gene count ratio no more than 1:1;
 - length minimum of 5 kbp or 10 kbp, unless a genome is >=50% complete (but not shorter than 1 kbp anyway).
   
+
 Different thresholds are used for metatranscriptomes.
 
 In this course, we won't filter any viral contigs.
@@ -961,7 +962,101 @@ But remember:
 - You will need to run the script once for each assembly  
 
 After you have submitted the script with `sbatch` the job will take a couple of hours to conclude.  
-But once it is finished we are ready to bin the MAGs!
+But once it is finished we are ready to bin the MAGs!  
+
+### Creating and adding SSH keys
+
+In this part we will need to connect to Puhti using a terminal emulator and the SSH protocol, the browser-based Puhti interface won't work.  
+First, **if you haven't done this before**, you will need to create SSH keys and add them to my.csc.fi .  
+Windows users will need to install the program `PuTTY` from the software centre, and Linux/Mac users will use the terminal app.  
+
+- Windows: https://csc-training.github.io/csc-env-eff/hands-on/connecting/ssh-keys.html#windows
+- Linux/Mac: https://csc-training.github.io/csc-env-eff/hands-on/connecting/ssh-keys.html#linux-and-macos
+
+When your SSH keys have been added to my.csc.fi, you can now connect to Puhti:  
+
+- Windows: https://docs.csc.fi/computing/connecting/ssh-windows
+- Linux/Mac: https://docs.csc.fi/computing/connecting/ssh-unix
+
+### Binning the MAGs with `anvi-interactive`  
+
+For practical reasons, we will do this part using the program `screen`.  
+This program acts as a virtual screen that keeps running when we logout of Puhti.  
+You can read more about `screen` for example [here](https://www.geeksforgeeks.org/linux-unix/screen-command-in-linux-with-examples/), but what we need to know now is:  
+
+```bash
+# to launch a new screen
+screen -S NAME_OF_THE_SCREEN
+
+# to detach the screen hold the ctrl key 
+# and then press a and d
+
+# to see the list of the screens that are running
+screen -ls
+
+# and to retach a previous screen
+screen -r NAME_OF_THE_SCREEN
+
+# check if you are indeed inside a screen
+# if the output is empty, you are NOT in a screen
+echo $STY
+
+# and to check in which login node we are
+# to be able to retach the screen later
+hostname -a
+```
+
+So, make sure that you are inside a screen and then:  
+
+```bash
+# connect interactively to a computing node
+sinteractive -t 6:00:00 -m 24G -A project_2001499
+
+# get the computing node id
+# write down the output of this command, 
+# we will need it for later
+echo ${SLURMD_NODENAME}.bullx
+
+# load the anvi'o installation
+export PATH="/projappl/project_2001499/anvio-dev/bin/:/projappl/project_2001499/anvio-gh/:$PATH"
+export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
+
+# get your port number
+# also write down the output for later
+grep $USER anvio_ports.txt | cut -f 2
+
+# now we launch anvi-interactive
+# remember to adjust the command first
+anvi-interactive \
+  -c path-to-the-CONTIGS.db \
+  -p path-to-the-merged-PROFILE.db \
+  -P your-port-number \
+  --ip-address 0.0.0.0 \
+  --server-only
+```
+
+`anvi-interactive` is now hosting a web server that we can access using the browser (Chrome- or Firefox-based, preferentially).  
+But to access this web server we need to do a small procedure called SSH tunelling.  
+First, detach the screen with `ctrl + a + d` and logout of Puhti.  
+Then, connect to Puhti again using a modified approach:  
+
+**Linux/Mac**
+
+```bash
+ssh -L \
+  PORT-NUMBER:COMPUTING-NODE-ID:PORT-NUMBER \
+  YOUR-USER@LOGIN-NODE.csc.fi
+
+# where:
+# PORT-NUMBER: the output of 'grep $USER anvio_ports.txt | cut -f 2'
+# COMPUTING-NODE-ID: the output of 'echo ${SLURMD_NODENAME}.bullx'
+# YOUR-USER: the output of 'echo $USER'
+# LOGIN-NODE: the output of 'hostname -a'
+```
+
+**Windows with PuTTY**  
+
+
 
 ## Phylogenetic and functional analyses of MAGs
 
