@@ -37,7 +37,7 @@
 | 13.00-14.00 | _Hands-on:_ Taxonomy in R (installation and reading in data) | [Instructions](README.md#read-based-taxonomy) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
 | 14.15-15.00 | _Hands-on:_ Taxonomy in R (basic visualizations and statistics) | [Instructions](README.md#read-based-taxonomy) |
-| 15.00-15.45 | _Hands-on:_ Viromics (Phold output, exploring IMG/VR) | [Instructions](README.md#viromics) |
+| 15.00-15.45 | _Hands-on:_ Viromics (exploring IMG/VR) | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 
 ## Monday (1.6.26)
@@ -61,7 +61,7 @@
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
 | 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-15.45 | _Hands-on:_ viromics (iPHoP output, summary) | [Instructions](README.md#viromics) |
+| 14.15-15.45 | _Hands-on:_ viromics (Phold and iPHoP outputs, summary) | [Instructions](README.md#viromics) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 | 16.30 -> | __Dinner at Pamela__  | :stew: |
 
