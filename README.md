@@ -68,5 +68,5 @@ By completing this course, you will:
 :woman_technologist: __Yasmine Eddoubaji__, Department of Microbiology, University of Helsinki  
 :woman_technologist: __Jenni Hultman__, Natural Resources Institute Finland (LUKE)  
 :woman_technologist: __Matilda Kattilakoski__, Natural Resources Institute Finland (LUKE)  
-:man_technologist: __Igor Pessi__, Finnish Environmental Institute (SYKE)  
+:man_technologist: __Igor Pessi__, Finnish Environment Institute (SYKE)  
 :man_technologist: __Antti Karkman__, Department of Microbiology, University of Helsinki  
