@@ -45,6 +45,7 @@ Main materials:
 Other materials:  
 
 - Article: [Accurate and complete genomes from metagenomes](https://genome.cshlp.org/content/30/3/315)
+- Article: [**Evaluation of metagenome binning: advances and challenges**](https://doi.org/10.1093/bib/bbaf617)
 - YouTube video: [Basics of metagenomic read recruitment](https://www.youtube.com/watch?v=MqD4aN1p1qA)
 
 ## Wednesday (3.6.26)
