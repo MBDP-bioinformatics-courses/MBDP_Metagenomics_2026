@@ -52,8 +52,11 @@ Other materials:
 
 Main materials:
 
-- XX
-- XX
+Viromics:
+
+- Article: [iPHoP: An integrated machine learning framework to maximize host prediction for metagenome-derived viruses of archaea and bacteria](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3002083)
+- Article: [Phage Annotation Guide: Guidelines for Assembly and High-Quality Annotation](https://journals.sagepub.com/doi/10.1089/phage.2021.0013)
+- Website: [ICTV, official taxonomic resources](https://ictv.global/)
 
 ## Friday (5.6.26)
 
