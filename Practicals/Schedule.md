@@ -44,7 +44,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-10.00 | __Igor Pessi:__ Introduction to binning and MAGs | [Slides](../Lectures/introduction-to-binning-and-MAGs.pdf) |
+| 09.00-10.00 | __Igor Pessi:__ Introduction to binning and MAGs | [Slides](../Lectures/06_introduction_to_binning_and_MAGs.pptx) |
 | 10.00-12.00 | _Hands-on:_ MAG binning in anvio | [Instructions](README.md#MAG-binning-in-anvio) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 | _Hands-on:_ MAG binning in anvio                 | [Instructions](README.md#MAG-binning-in-anvio)             |
