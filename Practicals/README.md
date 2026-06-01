@@ -1134,7 +1134,7 @@ Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.
 **Windows with PuTTY**  
 
 - Open PuTTY
-- 'Host name' will now be the output of `echo ${SLURMD_NODENAME}.bullx`
+- 'Host name' will now be the output of `hostname -a`
 - In the left menu go to Connection > SSH > Tunnels
   - 'Source port': the output of `grep $USER /scratch/project_2001499/anvio_ports.txt | cut -f 2`   
   - 'Destination': the output of `echo ${SLURMD_NODENAME}.bullx`, 
