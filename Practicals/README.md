@@ -1093,7 +1093,7 @@ export PYTHONPATH="/projappl/project_2001499/anvio-gh/:$PYTHONPATH"
 # also write down the output for later
 grep $USER /scratch/project_2001499/anvio_ports.txt | cut -f 2
 
-# now we launch anvi-interactive
+# now launch anvi-interactive for one of the assemblies
 # remember to adjust the command first
 anvi-interactive \
   -c path-to-the-CONTIGS.db \
@@ -1148,11 +1148,12 @@ Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.
 
 **Binning the MAGs (finally!)** 
 
-Now open your browser (Chrome- or Firefox-based, preferentially) and go to the adress that is shown by `anvi-interactive`, e.g. `http://0.0.0.0:8101`.  
-If this doesn't work, try `http://localhost:8101`.  
+Now open your browser (Chrome- or Firefox-based, preferentially) and go to the adress that is shown by `anvi-interactive`.  
+If this doesn't work try replacing `0.0.0.0` by `localhost`.  
 We will first take a look together , and then you can continue binning your own MAGs.  
 To save your collection, click on 'Store bin collection', write a name for the collection ('default' is fine) and then click 'Store'.  
 Wait until you see a blue banner in the top-right of the screen; then you can close the page, or continue binning.  
+Remember to this once for each assembly.  
 
 If you want to "zoom in" on a given bin, you can use another command:  
 
@@ -1178,23 +1179,24 @@ anvi-show-collections-and-bins \
 
 Manual binning might become impractical when you have a lot of data, so automatic binning algorithms are an alternative.  
 Let's run `metabat2` and see which kind of bins it gives us.  
-For this I have prepared a short helper script, to make things a bit easier:  
+For this I have prepared a short helper script, to make things a bit easier.  
+All you need to do is adjust the command below, one assembly at a time:  
 
 ```bash
 /scratch/project_2001499/metabat.sh \
   path-to-the-mapping-folder \
-  path-to-CONTIGS.fa \
-  path-to-output-file
+  path-to-the-CONTIGS.fa \
+  path-to-the-output-file
 ```
 
 Take a look at the output file using `head path-to-output-file`.  
-This is a two-column tab-delimited file with contig names on the left and bin names on the right.  
-With this file we can then create a collection in `anvi'o`:  
+This is a [collection-txt](https://anvio.org/help/main/artifacts/collection-txt/) artifact linking the contigs to their respective bins.  
+We can use this file to create a new bin collection in `anvi'o`:  
 
 ```bash
 anvi-import-collection \
-  path-to-the-bins-file \
-  -c path-to-CONTIGS.db \
+  path-to-collections-txt \
+  -c path-to-the-CONTIGS.db \
   -p path-to-the-merged-PROFILE.db \
   -C metabat2 \
   --contigs-mode
@@ -1214,24 +1216,43 @@ anvi-summarize \
   -C collection-name
 ```
 
-Download to your computer the file `path-to-the-output-folder/bins_summary.txt`.  
-Open this file in a text editor or Excel, and answer:  
+Do this once for each assembly and each of the manual and  `metabat` bins. 
+Then, one by one, inspect the bins summary file ( `path-to-the-output-folder/bins_summary.txt`) and answer:  
 
 - how many MAGs are ≥ 0.5 Mbp?
 - how many are ≥ 50 % complete?
 - how many are < 10% redundant?
 - how many were assigned to a certain taxon?
 
-Remember to do this once for each assembly and once for each of the manual and  `metabat` bins.  
-And for the `metabat` bins, **at least one round of `anvi-refine` is highly recommended**.  
+Now let's go back to the bins and see if there are some that could still be improved.  
+If you are planning to continue with the `metabat` bins, **at least one round of `anvi-refine` is highly recommended.**  
+If you have made changes to your bins, delete the summary folder and run `anvi-summarize` again.  
 
-## Phylogenetic and functional analyses of MAGs
+### Phylogenetic and functional analyses of MAGs
 
-GTDB
+Now you should decide if you would like to continue with the manual or the automatic bins.  
+Include both assemblies, even if you only have a handful of MAGs, but **do not mix the manual and automatic bins.**  
 
-kegg-kofams
+We will use [GTDB-Tk](https://github.com/Ecogenomics/GTDBTk) to assign taxonomy to the MAGs.  
+Copy the `gtdbtk.sh`  script to your own folder, modify where needed, and submit it with `sbatch`.  
 
-anvi-estimate-metabolism
+For functional annotation, we will use the KEGG implementation of``anvi'o`.  
+First, copy the `kegg-kofams.sh` script to your own folder, modify where needed, and submit it with `sbatch`.  
+When the job has finished, we continue with `anvi-estimate-metabolism`, **once for each assembly**:     
+
+```bash
+anvi-estimate-metabolism \
+  -c path-to-the-CONTIGS.db \
+  -p path-to-the-merged-PROFILE.db \
+  -O prefix-for-output-file \
+  -C collection-name \
+  --output-modes hits,modules \
+  --kegg-data-dir /scratch/project_2001499/DBs/anvio_kegg_data
+```
+
+Once the `gtdbtk` and `anvi-estimate-metabolism` jobs are completed, investigate the output files and try to answer the following questions:  
+
+- 
 
 
 
