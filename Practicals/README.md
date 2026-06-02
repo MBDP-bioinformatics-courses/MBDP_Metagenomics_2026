@@ -952,6 +952,8 @@ We usually refer to these bins as "population genomes" or "metagenome-assembled 
 We will mostly use `anvi'o`, which is an open-source, community-driven **an**alysis and **vi**sualization platform for microbial **'o**mics (https://anvio.org).  
 Although `anvi'o` does include automatic binning programs (e.g. `MetaBat2`), we will focus on manual, interactive binning.  
 
+### Preparing the files
+
 Let's start by making a directory for the genome-resolved analyses:  
 
 ```bash
@@ -1032,22 +1034,22 @@ But once it is finished we are ready to bin the MAGs!
 
 ### Creating and adding SSH keys
 
-In this part we will need to connect to Puhti using a terminal emulator and the SSH protocol, the browser-based Puhti interface won't work.  
-First, **if you haven't done this before**, you will need to create SSH keys and add them to my.csc.fi .  
+In this part we will need to connect to Puhti using a terminal emulator and the SSH protocol, since the browser-based Puhti interface won't work.  
+First, **if you haven't done this before**, you will need to create SSH keys and add them to [my.csc.fi](my.csc.fi).  
 Windows users will need to install the program `PuTTY` from the software centre, and Linux/Mac users will use the terminal app.  
 
 - Windows: https://csc-training.github.io/csc-env-eff/hands-on/connecting/ssh-keys.html#windows
 - Linux/Mac: https://csc-training.github.io/csc-env-eff/hands-on/connecting/ssh-keys.html#linux-and-macos
 
-When your SSH keys have been added to my.csc.fi, you can now connect to Puhti:  
+After your SSH keys have been added to [my.csc.fi](my.csc.fi), you can then connect to Puhti:  
 
 - Windows: https://docs.csc.fi/computing/connecting/ssh-windows
 - Linux/Mac: https://docs.csc.fi/computing/connecting/ssh-unix
 
-### Binning the MAGs with `anvi-interactive`  
+### Binning MAGs with `anvi-interactive`  
 
 For practical reasons, we will do this part using the program `screen`.  
-This program acts as a virtual screen that keeps running when we logout of Puhti.  
+This program acts as a virtual screen that stays running when we logout of Puhti.  
 You can read more about `screen` for example [here](https://www.geeksforgeeks.org/linux-unix/screen-command-in-linux-with-examples/), but what we need to know now is:  
 
 ```bash
@@ -1064,7 +1066,7 @@ screen -ls
 screen -r NAME_OF_THE_SCREEN
 
 # check if you are indeed inside a screen
-# if the output is empty, you are NOT in a screen
+# if the output is empty, you are NOT
 echo $STY
 
 # and to check in which login node we are
@@ -1147,7 +1149,8 @@ Now you can retach the screen with `screen -r NAME_OF_THE_SCREEN`.
 **Binning the MAGs (finally!)** 
 
 Now open your browser (Chrome- or Firefox-based, preferentially) and go to the adress that is shown by `anvi-interactive`, e.g. `http://0.0.0.0:8101`.  
-We will first take a look together on how this works in practice, and then you can continue binning your own MAGs.  
+If this doesn't work, try `http://localhost:8101`.  
+We will first take a look together , and then you can continue binning your own MAGs.  
 To save your collection, click on 'Store bin collection', write a name for the collection ('default' is fine) and then click 'Store'.  
 Wait until you see a blue banner in the top-right of the screen; then you can close the page, or continue binning.  
 
@@ -1171,7 +1174,37 @@ anvi-show-collections-and-bins \
   -p path-to-the-merged-PROFILE.db
 ```
 
-And to get a summary of the completeness, redundancy, taxonomy of the bins:  
+### Binning MAGs with `metabat2`
+
+Manual binning might become impractical when you have a lot of data, so automatic binning algorithms are an alternative.  
+Let's run `metabat2` and see which kind of bins it gives us.  
+For this I have prepared a short helper script, to make things a bit easier:  
+
+```bash
+/scratch/project_2001499/metabat.sh \
+  path-to-the-mapping-folder \
+  path-to-CONTIGS.fa \
+  path-to-output-file
+```
+
+Take a look at the output file using `head path-to-output-file`.  
+This is a two-column tab-delimited file with contig names on the left and bin names on the right.  
+With this file we can then create a collection in `anvi'o`:  
+
+```bash
+anvi-import-collection \
+  path-to-the-bins-file \
+  -c path-to-CONTIGS.db \
+  -p path-to-the-merged-PROFILE.db \
+  -C metabat2 \
+  --contigs-mode
+```
+
+Remember to run these two commands once for each assembly.  
+
+### Summarising the bins
+
+When you are done with the binning, you can run the command below to get a summary of the completeness, redundancy, taxonomy of the bins:  
 
 ```bash
 anvi-summarize \
@@ -1181,9 +1214,24 @@ anvi-summarize \
   -C collection-name
 ```
 
+Download to your computer the file `path-to-the-output-folder/bins_summary.txt`.  
+Open this file in a text editor or Excel, and answer:  
 
+- how many MAGs are ≥ 0.5 Mbp?
+- how many are ≥ 50 % complete?
+- how many are < 10% redundant?
+- how many were assigned to a certain taxon?
 
-
+Remember to do this once for each assembly and once for each of the manual and  `metabat` bins.  
+And for the `metabat` bins, **at least one round of `anvi-refine` is highly recommended**.  
 
 ## Phylogenetic and functional analyses of MAGs
+
+GTDB
+
+kegg-kofams
+
+anvi-estimate-metabolism
+
+
 
