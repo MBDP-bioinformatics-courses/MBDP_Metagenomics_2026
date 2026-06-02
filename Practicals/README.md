@@ -1226,19 +1226,45 @@ Then, one by one, inspect the bins summary file ( `path-to-the-output-folder/bin
 
 Now let's go back to the bins and see if there are some that could still be improved.  
 If you are planning to continue with the `metabat` bins, **at least one round of `anvi-refine` is highly recommended.**  
-If you have made changes to your bins, delete the summary folder and run `anvi-summarize` again.  
 
 ### Phylogenetic and functional analyses of MAGs
 
 Now you should decide if you would like to continue with the manual or the automatic bins.  
 Include both assemblies, even if you only have a handful of MAGs, but **do not mix the manual and automatic bins.**  
+If you have made changes to your bins, delete the summary folder and run `anvi-summarize` again.  
 
 We will use [GTDB-Tk](https://github.com/Ecogenomics/GTDBTk) to assign taxonomy to the MAGs.  
-Copy the `gtdbtk.sh`  script to your own folder, modify where needed, and submit it with `sbatch`.  
+First let's gather the MAGs from the two assemblies into a new folder.  
+You might have bins with the same name in both assemblies, so make sure that they are unique, for example:  
+
+```bash
+mkdir ALL_BINS
+
+assembly=ERR5000342
+for bin in $assembly/METABAT_SUMMARY/bin_by_bin/*/*-contigs.fa
+do
+  bin_name=`basename $bin -contigs.fa`
+  bin_name=${assembly}_${bin_name}.fa
+
+  cp $bin ALL_BINS/$bin_name
+done
+
+assembly=ERR5000343
+for bin in $assembly/METABAT_SUMMARY/bin_by_bin/*/*-contigs.fa
+do
+  bin_name=`basename $bin -contigs.fa`
+  bin_name=${assembly}_${bin_name}.fa
+
+  cp $bin ALL_BINS/$bin_name
+done
+```
+
+Now copy the `gtdbtk.sh`  script to your own folder, modify where needed, and submit it with `sbatch`.  
+This should take ~2 hours.
 
 For functional annotation, we will use the KEGG implementation of``anvi'o`.  
 First, copy the `kegg-kofams.sh` script to your own folder, modify where needed, and submit it with `sbatch`.  
-When the job has finished, we continue with `anvi-estimate-metabolism`, **once for each assembly**:     
+When the job has finished (~5 hours), we continue with `anvi-estimate-metabolism`, **once for each assembly**:     
 
 ```bash
 anvi-estimate-metabolism \
