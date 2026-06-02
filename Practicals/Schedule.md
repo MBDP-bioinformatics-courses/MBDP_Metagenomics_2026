@@ -57,11 +57,13 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-12.00 | _Hands-on:_ Phylogenetic and functional analyses of MAGs | [Instructions](README.md#Phylogenetic-and-functional-analyses-of-MAGs) |
+| 09.00-11.00 | _Hands-on:_ Automatic binning | [Instructions](README.md#MAG-binning-in-anvio) |
+| 11.00-12.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
-| 13.00-14.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
-| 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-15.45 | _Hands-on:_ viromics (Phold and iPHoP outputs, summary) | [Instructions](README.md#viromics) |
+| 13.00-14.15 | _Hands-on:_ viromics (Phold and iPHoP outputs) | [Instructions](README.md#viromics) |
+| 14.15-14.30 | __Coffee break__  | :coffee: |
+| 14.30-15.15 | _Hands-on:_ viromics (summary) | [Instructions](README.md#viromics) |
+| 15.15-15.45 | _Setting up Fri sessions_ | [Instructions](README.md#XX) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
 | 16.30 -> | __Dinner at Pamela__  | :stew: |
 
@@ -70,7 +72,7 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-10.30 | _Hands-on:_ Automatic binning (?) | [Instructions](README.md#automatic-binning) |
+| 09.00-10.30 | _Hands-on:_ Phylogenetic and functional analyses of MAGs | [Instructions](README.md#Phylogenetic-and-functional-analyses-of-MAGs) |
 | 10.30-12.00 |  _Hands-on:_ XX ? | [Instructions](README.md#XX) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
 | 13.00-14.00 |  _Hands-on:_ XX ? | [Instructions](README.md#XX) |
