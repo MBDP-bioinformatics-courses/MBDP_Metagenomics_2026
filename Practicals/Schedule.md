@@ -72,11 +72,10 @@
 
 | Time | Description | Link |
 | --- | --- | -- |
-| 09.00-10.30 | _Hands-on:_ Phylogenetic and functional analyses of MAGs | [Instructions](README.md#Phylogenetic-and-functional-analyses-of-MAGs) |
-| 10.30-12.00 |  _Hands-on:_ XX ? | [Instructions](README.md#XX) |
+| 09.00-10.00 | _Hands-on:_ Phylogenetic and functional analyses of MAGs | [Instructions](README.md#Phylogenetic-and-functional-analyses-of-MAGs) |
+| 10.00-12.00 |  _Hands-on:_ Statistics in R | [Instructions](README.md#XX) |
 | 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
-| 13.00-14.00 |  _Hands-on:_ XX ? | [Instructions](README.md#XX) |
-| 14.00-14.15 | __Coffee break__  | :coffee: |
-| 14.15-15.45 | __Q & A__ and feedback| [Link to feedback](https://norppa.helsinki.fi/targets/82937025/feedback) |
-| 15.45-16.00 | __Final conclusions and wrap-up__ | [Slides](../Lectures/XX.pdf) |
+| 13.00-14.15 |  _Hands-on:_ Additional time if needed | [Instructions](README.md#XX) |
+| 14.15-14.30 | __Coffee break__  | :coffee: |
+| 14.30-16.00 | __Wrap-up and Q & A__ | [Link to feedback](https://norppa.helsinki.fi/targets/102918670/feedback) |
 
