@@ -58,8 +58,8 @@
 | Time | Description | Link |
 | --- | --- | -- |
 | 09.00-11.00 | _Hands-on:_ Automatic binning | [Instructions](README.md#MAG-binning-in-anvio) |
-| 11.00-12.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
-| 12.00-13.00 | __Lunch break__ | :plate_with_cutlery: |
+| 11.00-12.00 | __Lunch break__ | :plate_with_cutlery: |
+| 12.00-13.00 | __Jenni Hultman:__ Info session about Roihu | [Slides](../Lectures/XX.pdf) |
 | 13.00-14.15 | _Hands-on:_ viromics (Phold and iPHoP outputs) | [Instructions](README.md#viromics) |
 | 14.15-14.30 | __Coffee break__  | :coffee: |
 | 14.30-15.45 | _Hands-on:_ viromics (summary) | [Instructions](README.md#viromics) |
