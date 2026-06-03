@@ -65,7 +65,7 @@
 | 14.30-15.15 | _Hands-on:_ viromics (summary) | [Instructions](README.md#viromics) |
 | 15.15-15.45 | _Setting up Fri sessions_ | [Instructions](README.md#XX) |
 | 15.45-16.00 | __Daily wrap-up__ |  |
-| 16.30 -> | __Dinner at Pamela__  | :stew: |
+| 17.00 -> | __Dinner at Pamela__  | :stew: |
 
 
 ## Friday (5.6.26)
