@@ -2,7 +2,7 @@
 #SBATCH --job-name=gtdbtk
 #SBATCH --account=project_2001499
 #SBATCH --time=6:00:00
-#SBATCH --mem=48G
+#SBATCH --mem=128G
 #SBATCH --cpus-per-task=8
 #SBATCH --gres=nvme:48
 #SBATCH --output=%x-%j.out
