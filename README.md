@@ -47,6 +47,8 @@ __Practicals:__
 [__-- Detailed SCHEDULE --__](Practicals/Schedule.md)  
 [__-- Link to PRACTICALS --__](Practicals/README.md)
 
+Link to [Q&A document.](https://docs.google.com/document/d/1uHuQTRSXWRZx62bUBe9wqzEGry2R7KNnWSpwE46AH-o/edit?usp=sharing)  
+
 ## Target group
 
 This course is targeted to PhD students from the Doctoral Programme in Microbiology and Biotechnology (MBDP). Also other PhD students interested in microbial metagenomics are welcome if space allows.  
