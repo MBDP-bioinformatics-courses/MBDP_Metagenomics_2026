@@ -1178,7 +1178,7 @@ anvi-show-collections-and-bins \
 ### Binning MAGs with `metabat2`
 
 Manual binning might become impractical when you have a lot of data, so automatic binning algorithms are an alternative.  
-Let's run `metabat2` and see which kind of bins it gives us.  
+Let's run [metabat2](https://doi.org/10.7717/peerj.7359) and see which kind of bins it gives us.  
 For this I have prepared a short helper script, to make things a bit easier.  
 All you need to do is adjust the command below, one assembly at a time:  
 
@@ -1260,11 +1260,11 @@ done
 ```
 
 Now copy the `gtdbtk.sh`  script to your own folder, modify where needed, and submit it with `sbatch`.  
-This should take ~2 hours.
+This should take ~3 hours.
 
 For functional annotation, we will use the KEGG implementation of``anvi'o`.  
 First, copy the `kegg-kofams.sh` script to your own folder, modify where needed, and submit it with `sbatch`.  
-When the job has finished (~5 hours), we continue with `anvi-estimate-metabolism`, **once for each assembly**:     
+When the job has finished (~5 hours), we continue with `anvi-estimate-metabolism`, **once for each assembly**:  
 
 ```bash
 anvi-estimate-metabolism \
@@ -1276,9 +1276,13 @@ anvi-estimate-metabolism \
   --kegg-data-dir /scratch/project_2001499/DBs/anvio_kegg_data
 ```
 
-Once the `gtdbtk` and `anvi-estimate-metabolism` jobs are completed, investigate the output files and try to answer the following questions:  
+Once the `gtdbtk` and `anvi-estimate-metabolism` jobs are completed, investigate some of the output files:
 
-- 
+- `anvi-summarize`: `bins_summary.txt` and `bins_across_samples/mean_coverage.txt` (see more [here](https://anvio.org/help/main/artifacts/profile-summary/))
+- `gtdbtk`: `gtdbtk.bac120.summary.tsv` and `gtdbtk.ar53.summary.tsv` (see more [here](https://ecogenomics.github.io/GTDBTk/files/summary.tsv.html))
+- `anvi-estimate-metabolism`: `hits.txt` and `modules.txt` (see more [here](https://anvio.org/help/main/artifacts/kegg-metabolism/#long-format-output-modes))
 
+Now incorporate the sample metadata information (`metadata.tsv`),  and try to answer the following questions:  
 
-
+- What are the most abundant microbes in each type of sample?
+- What are their putative metabolic functions?
