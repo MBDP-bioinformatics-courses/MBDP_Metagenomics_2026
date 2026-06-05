@@ -1262,7 +1262,7 @@ done
 Now copy the `gtdbtk.sh`  script to your own folder, modify where needed, and submit it with `sbatch`.  
 This should take ~3 hours.
 
-For functional annotation, we will use the KEGG implementation of``anvi'o`.  
+For functional annotation, we will use the KEGG implementation of `anvi'o`.  
 First, copy the `kegg-kofams.sh` script to your own folder, modify where needed, and submit it with `sbatch`.  
 When the job has finished (~5 hours), we continue with `anvi-estimate-metabolism`, **once for each assembly**:  
 
